@@ -12,6 +12,28 @@ $(function () {
   $('.usersIndex').on('click', getDogs);
   $('.logout').on('click', logout);
 
+  var $mapDiv = $('#map');
+
+  var map = new google.maps.Map($mapDiv[0], {
+    center: { lat: 51.5, lng: -0.1 },
+    zoom: 14
+  });
+  navigator.geolocation.getCurrentPosition(function (position) {
+    var latLng = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+    map.panTo(latLng);
+    map.setZoom(12);
+
+    var marker = new google.maps.Marker({
+      position: latLng,
+      animation: google.maps.Animation.DROP,
+      draggable: true,
+      map: map
+    });
+  });
+
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }

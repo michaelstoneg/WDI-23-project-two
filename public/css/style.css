@@ -1,11 +1,1 @@
-.navbar {
-  margin-bottom: 30px;
-}
-
-.col-md-4 {
-  margin-bottom: 20px;
-}
-
-.card-img-top {
-  max-width: 280px;
-}
+#map{width:70vw;height:70vh;margin:5px auto}
