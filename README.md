@@ -2,5 +2,6 @@
 WDI 23 London Project Two Node App
 
 michael
+Will
 Oli
 Jane
