@@ -9,7 +9,8 @@ $(function () {
   $main.on('submit', 'form', handleForm);
   $main.on('click', 'button.delete', deleteDog);
   $main.on('click', 'button.edit', getDog);
-  $('.usersIndex').on('click', getDogs);
+  $('.dogsIndex').on('click', getDogs);
+  $('.createDog').on('click', showCreateForm);
   $('.logout').on('click', logout);
 
   function isLoggedIn() {
@@ -32,9 +33,15 @@ $(function () {
     $main.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
   }
 
+  function showCreateForm() {
+    if (event) event.preventDefault();
+    console.log("new dog!!");
+    $main.html('\n      <h2>Create</h2>\n      <form method="post" action="/dogs">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="name">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="breed" placeholder="breed">\n        </div>\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="age" placeholder="age">\n        </div>\n        <button class="btn btn-primary">Create</button>\n      </form>\n    ');
+  }
+
   function showEditForm(dog) {
     if (event) event.preventDefault();
-    $main.html('\n      <h2>Edit Dog</h2>\n      <form method="put" action="/dogs/' + dog._id + '">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="Name" value="' + dog.name + '">\n          <input class="form-control" name="breed" placeholder="Breed" value="' + dog.breed + '">\n          <input class="form-control" name="age" placeholder="Age" value="' + dog.age + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
+    $main.html('\n      <h2>Edit Dog</h2>\n      <form method="put" action="/dogs/' + dog._id + '">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="' + dog.name + '">\n          <input class="form-control" name="breed" placeholder="' + dog.breed + '">\n          <input class="form-control" name="age" placeholder="' + dog.age + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
   }
 
   function handleForm() {

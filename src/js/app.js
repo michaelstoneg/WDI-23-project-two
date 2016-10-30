@@ -1,13 +1,17 @@
 $(() =>{
 
+
   let $main = $('main');
+
+
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
   $main.on('submit', 'form', handleForm);
   $main.on('click', 'button.delete', deleteDog);
   $main.on('click', 'button.edit', getDog);
-  $('.usersIndex').on('click', getDogs);
+  $('.dogsIndex').on('click', getDogs);
+  $('.createDog').on('click', showCreateForm);
   $('.logout').on('click', logout);
 
   function isLoggedIn() {
@@ -58,15 +62,38 @@ $(() =>{
     `);
   }
 
+
+  function showCreateForm() {
+    if(event) event.preventDefault();
+    console.log("new dog!!");
+    $main.html(`
+      <h2>Create</h2>
+      <form method="post" action="/dogs">
+        <div class="form-group">
+          <input class="form-control" name="name" placeholder="name">
+        </div>
+        <div class="form-group">
+          <input class="form-control" name="breed" placeholder="breed">
+        </div>
+        </div>
+        <div class="form-group">
+          <input class="form-control" name="age" placeholder="age">
+        </div>
+        <button class="btn btn-primary">Create</button>
+      </form>
+    `);
+  }
+
+
   function showEditForm(dog) {
     if(event) event.preventDefault();
     $main.html(`
       <h2>Edit Dog</h2>
       <form method="put" action="/dogs/${dog._id}">
         <div class="form-group">
-          <input class="form-control" name="name" placeholder="Name" value="${dog.name}">
-          <input class="form-control" name="breed" placeholder="Breed" value="${dog.breed}">
-          <input class="form-control" name="age" placeholder="Age" value="${dog.age}">
+          <input class="form-control" name="name" placeholder="${dog.name}">
+          <input class="form-control" name="breed" placeholder="${dog.breed}">
+          <input class="form-control" name="age" placeholder="${dog.age}">
         </div>
         <button class="btn btn-primary">Update</button>
       </form>
@@ -130,6 +157,7 @@ $(() =>{
     });
 
     $main.html($row);
+
   }
 
   function deleteDog() {
