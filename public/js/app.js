@@ -29,29 +29,26 @@ $(function () {
   }).done(updateData).fail();
 
   function updateData(data) {
-    myVariable = data;
-    console.log(myVariable.query.pages[133260].extract);
+    myVariable = data.query.pages[133260].extract;
+    console.log(myVariable);
+    var contentString = '<div id="content">' + '<div id="siteNotice">' + '</div>' + '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' + '<div id="bodyContent">' + '<p>' + myVariable + '</p>' + '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' + 'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' + '(last visited June 22, 2009).</p>' + '</div>' + '</div>';
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    var marker = new google.maps.Marker({
+      position: uluru,
+      map: map,
+      title: 'Uluru (Ayers Rock)'
+    });
+    marker.addListener('click', function () {
+      infowindow.open(map, marker);
+    });
   }
 
   var uluru = { lat: -25.363, lng: 131.044 };
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 4,
     center: uluru
-  });
-
-  var contentString = myVariable;
-
-  var infowindow = new google.maps.InfoWindow({
-    content: contentString
-  });
-
-  var marker = new google.maps.Marker({
-    position: uluru,
-    map: map,
-    title: 'Uluru (Ayers Rock)'
-  });
-  marker.addListener('click', function () {
-    infowindow.open(map, marker);
   });
 });
 //   function isLoggedIn() {
