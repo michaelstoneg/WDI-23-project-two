@@ -7,10 +7,10 @@ $(function () {
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
   $main.on('submit', 'form', handleForm);
-  $main.on('click', 'button.delete', deleteDog);
-  $main.on('click', 'button.edit', getDog);
-  $('.dogsIndex').on('click', getDogs);
-  $('.createDog').on('click', showCreateForm);
+  $main.on('click', 'button.delete', deleteHistEvent);
+  $main.on('click', 'button.edit', getHistEvent);
+  $('.histEventsIndex').on('click', getHistEvents);
+  $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
 
   var $mapDiv = $('#map');
@@ -40,7 +40,7 @@ $(function () {
   }
 
   if (isLoggedIn()) {
-    getDogs();
+    getHistEvents();
   } else {
     showLoginForm();
   }
@@ -57,13 +57,13 @@ $(function () {
 
   function showCreateForm() {
     if (event) event.preventDefault();
-    console.log("new dog!!");
-    $main.html('\n      <h2>Create</h2>\n      <form method="post" action="/dogs">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="name">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="breed" placeholder="breed">\n        </div>\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="age" placeholder="age">\n        </div>\n        <button class="btn btn-primary">Create</button>\n      </form>\n    ');
+    console.log("new histEvent!!");
+    $main.html('\n      <h2>Create</h2>\n      <form method="post" action="/histEvents">\n        <div class="form-group">\n          <input class="form-control" name="histEvent" placeholder="histEvent">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="description" placeholder="description">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="image" placeholder="image url">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="year" placeholder="year">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="location" placeholder="location">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="lat" placeholder="latitude">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="lng" placeholder="longitude">\n        </div>\n        <button class="btn btn-primary">Create</button>\n      </form>\n    ');
   }
 
-  function showEditForm(dog) {
+  function showEditForm(histEvent) {
     if (event) event.preventDefault();
-    $main.html('\n      <h2>Edit Dog</h2>\n      <form method="put" action="/dogs/' + dog._id + '">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="' + dog.name + '">\n          <input class="form-control" name="breed" placeholder="' + dog.breed + '">\n          <input class="form-control" name="age" placeholder="' + dog.age + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
+    $main.html('\n      <h2>Edit HistEvent</h2>\n      <form method="put" action="/histEvents/' + histEvent._id + '">\n        <div class="form-group">\n          <input class="form-control" name="histEvent" placeholder="' + histEvent.histEvent + '">\n          <input class="form-control" name="description" placeholder="' + histEvent.description + '">\n          <input class="form-control" name="image" placeholder="' + histEvent.image + '">\n          <input class="form-control" name="year" placeholder="' + histEvent.year + '">\n          <input class="form-control" name="location" placeholder="' + histEvent.location + '">\n          <input class="form-control" name="lat" placeholder="' + histEvent.latitude + '">\n          <input class="form-control" name="lng" placeholder="' + histEvent.longitude + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
   }
 
   function handleForm() {
@@ -84,52 +84,52 @@ $(function () {
       }
     }).done(function (data) {
       if (data.token) localStorage.setItem('token', data.token);
-      getDogs();
+      getHistEvents();
       console.log(data);
     }).fail(showLoginForm);
   }
 
-  function getDogs() {
+  function getHistEvents() {
     if (event) event.preventDefault();
 
     var token = localStorage.getItem('token');
     $.ajax({
-      url: '/dogs',
+      url: '/histEvents',
       method: "GET",
       beforeSend: function beforeSend(jqXHR) {
         if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
       }
-    }).done(showDogs).fail(showLoginForm);
+    }).done(showHistEvents).fail(showLoginForm);
   }
 
-  function showDogs(dogs) {
+  function showHistEvents(histEvents) {
     var $row = $('<div class="row"></div>');
-    dogs.forEach(function (dog) {
-      $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/originals/cf/63/54/cf6354ef04148220314dc3610d8f8cdd.jpg" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + dog.name + '</h4>\n              <p class="card-text">' + dog.breed + ', ' + dog.age + '</p>\n            </div>\n          </div>\n          <button class="btn btn-danger delete" data-id="' + dog._id + '">Delete</button>\n          <button class="btn btn-primary edit" data-id="' + dog._id + '">Edit</button>\n        </div>\n      ');
+    histEvents.forEach(function (histEvent) {
+      $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="' + histEvent.image + '" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + histEvent.histEvent + '</h4>\n              <h5 class="card-title">' + histEvent.year + '</h5>\n              <h5 class="card-title">' + histEvent.location + '</h5>\n              <p class="card-text">' + histEvent.description + '</p>\n            </div>\n          </div>\n          <button class="btn btn-danger delete" data-id="' + histEvent._id + '">Delete</button>\n          <button class="btn btn-primary edit" data-id="' + histEvent._id + '">Edit</button>\n        </div>\n      ');
     });
 
     $main.html($row);
   }
 
-  function deleteDog() {
+  function deleteHistEvent() {
     var id = $(this).data('id');
     var token = localStorage.getItem('token');
 
     $.ajax({
-      url: '/dogs/' + id,
+      url: '/histEvents/' + id,
       method: "DELETE",
       beforeSend: function beforeSend(jqXHR) {
         if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
       }
-    }).done(getDogs).fail(showLoginForm);
+    }).done(getHistEvents).fail(showLoginForm);
   }
 
-  function getDog() {
+  function getHistEvent() {
     var id = $(this).data('id');
     var token = localStorage.getItem('token');
 
     $.ajax({
-      url: '/dogs/' + id,
+      url: '/histEvents/' + id,
       method: "GET",
       beforeSend: function beforeSend(jqXHR) {
         if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
