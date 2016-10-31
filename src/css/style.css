@@ -28,3 +28,11 @@
   transform: translate(-50%, -50%);
   display: none;
 }
+
+.hud {
+  height: 50px;
+  width: 500px;
+  border: 3px solid black;
+  text-align: center;
+  margin: 0 auto;
+}
