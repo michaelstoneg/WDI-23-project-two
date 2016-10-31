@@ -4,12 +4,14 @@ $(() =>{
   let $popup = $('.popup');
   let $popupContent = $('.popupContent');
   let $mapDiv = $('#map');
-  let allEvents;
-  let map;
+  let $change = $('#change-map');
+  let counter = 0;
+
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
   $popupContent.on('submit', 'form', handleForm);
+  $change.on('click', showMap);
   $main.on('click', 'button.delete', deleteHistEvent);
   $main.on('click', 'button.edit', getHistEvent);
   $('.histEventsIndex').on('click', getHistEvents);
@@ -17,41 +19,81 @@ $(() =>{
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
 
+
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }
 
   if(isLoggedIn()) {
-    showMap();
-    getHistEvents();
+    imIn();
   } else {
-    showLoginForm();
+    $mapDiv.hide();
+    $change.hide();
+    $('.createHistEvent').hide();
+    $('.histEventsIndex').hide();
+  }
+
+  function imIn() {
+    console.log("logged in");
+    $('.popup').hide();
+    $('.register').hide();
+    $('.login').hide();
+    $change.show();
+    $('.createHistEvent').show();
+    $('.histEventsIndex').show();
+    showMap();
   }
 
   function menuHandler() {
     $('.popup').hide();
   }
 
-  function showMap() {
-    map = new google.maps.Map($mapDiv[0], {
-      center: { lat: 51.5, lng: -0.1 },
-      zoom: 14
-    });
-    navigator.geolocation.getCurrentPosition((position) => {
-      let latLng = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      map.panTo(latLng);
-      map.setZoom(12);
 
-      let marker = new google.maps.Marker({
-        position: latLng,
-        animation: google.maps.Animation.DROP,
-        draggable: true,
-        map: map
-      });
+function showMap() {
+
+  console.log("maps 4 u");
+  $mapDiv.show();
+
+  const locations = [
+    {
+      "name": "Rome",
+      "center": { lat: 41.8903, lng: 12.4924 },
+      "styles": [{"featureType":"all","elementType":"geometry","stylers":[{"color":"#787878"}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"gamma":0.01},{"lightness":20}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"saturation":-31},{"lightness":-33},{"weight":2},{"gamma":0.8}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":30},{"saturation":30}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#ff0000"},{"saturation":"-50"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"saturation":20}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"lightness":20},{"saturation":-20}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":10},{"saturation":-30}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":25},{"lightness":25}]},{"featureType":"water","elementType":"all","stylers":[{"lightness":-20}]}]
+    },
+    {
+      "name": "London",
+      "center": { lat: 51.5076, lng: -0.1278 },
+      "styles": [{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#808080"},{"lightness":-100}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#b72025"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#b72025"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"saturation":-100},{"lightness":-14}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#b72025"}]},{"featureType":"water","elementType":"geometry.stroke","stylers":[{"saturation":-100},{"lightness":-100},{"weight":0.2}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"color":"#808080"},{"lightness":33}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#808080"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"poi.sports_complex","elementType":"geometry","stylers":[{"saturation":-100},{"lightness":-100}]},{"featureType":"poi","stylers":[{"saturation":-100},{"lightness":-9}]},{"featureType":"road","elementType":"labels.icon","stylers":[{"visibility":"on"},{"saturation":-100}]},{"featureType":"administrative","elementType":"labels.text","stylers":[{"color":"#b72025"}]},{"featureType":"administrative","elementType":"labels.text.stroke","stylers":[{"saturation":-100},{"lightness":-100},{"weight":0.3}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"saturation":-100},{"lightness":-100}]},{"featureType":"transit","elementType":"labels.icon","stylers":[{"saturation":-100}]},{"featureType":"road.local","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{},{"featureType":"road.local","elementType":"labels.text","stylers":[{"visibility":"on"},{"saturation":-100},{"lightness":13}]},{"featureType":"road.highway","elementType":"labels.icon","stylers":[{"invert_lightness":true},{"lightness":-4},{"saturation":-90},{"visibility":"on"}]},{"featureType":"road.highway","elementType":"labels.text.stroke","stylers":[{"weight":0.1}]},{"featureType":"landscape.natural","elementType":"labels.text.fill","stylers":[{"color":"#b72025"}]}]
+    },
+    {
+      "name": "Kingston",
+      "center": { lat: 18.0179, lng: -76.8099 },
+      styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry","stylers":[{"color":"#ffebc5"},{"lightness":"-10"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#675a4b"}]},{"featureType":"administrative.country","elementType":"labels.text.fill","stylers":[{"color":"#b70046"}]},{"featureType":"administrative.province","elementType":"geometry.fill","stylers":[{"visibility":"off"}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"color":"#675a4b"},{"weight":"0.50"}]},{"featureType":"administrative.province","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"administrative.locality","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"color":"#ff850a"}]},{"featureType":"administrative.neighborhood","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"administrative.neighborhood","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"saturation":"-71"},{"lightness":"-2"},{"color":"#ffebc5"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#70bfaf"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#675a4c"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#7ccff0"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#cfeae4"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#109579"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]}]
+    },
+    {
+      "name": "Berlin",
+      "center": { lat: 52.5200, lng: 13.4049 },
+      styles: [{"featureType":"all","elementType":"all","stylers":[{"hue":"#ffaa00"},{"saturation":"-33"},{"lightness":"10"}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"color":"#9c5e18"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"transit.line","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"saturation":"-23"},{"gamma":"2.01"},{"color":"#f2f6f6"}]},{"featureType":"water","elementType":"geometry.stroke","stylers":[{"saturation":"-14"}]}]
+    }
+  ];
+
+    let center = locations[counter].center;
+    let styles = locations[counter].styles;
+
+    let map = new google.maps.Map($mapDiv[0], {
+      center: center,
+      zoom: 14,
+      styles: styles
     });
+
+    let marker = new google.maps.Marker({
+      position: center,
+      animation: google.maps.Animation.DROP,
+      draggable: true,
+      map
+    });
+
+    counter++;
   }
 
   function showRegisterForm() {
@@ -168,9 +210,10 @@ $(() =>{
       }
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
-      $('.popup').hide();
-      showMap();
-      getHistEvents();
+      console.log(data);
+      if (url === '/login' || url === '/register') {
+        imIn();
+      }
     }).fail(showLoginForm);
   }
 
@@ -252,7 +295,13 @@ $(() =>{
     if(event) event.preventDefault();
     localStorage.removeItem('token');
     $mapDiv.hide();
-    showLoginForm();
+    $change.hide();
+    $('.createHistEvent').hide();
+    $('.histEventsIndex').hide();
+    $('.register').show();
+    $('.login').show();
+    counter = 0;
+    // showLoginForm();
   }
 
   function createHistEventMarker(histEvent) {
