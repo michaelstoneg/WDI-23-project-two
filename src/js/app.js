@@ -3,54 +3,70 @@ $(() =>{
 
   let $main = $('main');
   let $popup = $('.popup');
+  let $popupContent = $('.popupContent');
+  let $mapDiv = $('#map');
+
 
 
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
-  $popup.on('submit', 'form', handleForm);
-  $popup.on('click', 'button.delete', deleteHistEvent);
-  $popup.on('click', 'button.edit', getHistEvent);
+  $popupContent.on('submit', 'form', handleForm);
+  $main.on('click', 'button.delete', deleteHistEvent);
+  $main.on('click', 'button.edit', getHistEvent);
   $('.histEventsIndex').on('click', getHistEvents);
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
+  $('.close').on('click', menuHandler);
 
-  let $mapDiv = $('#map');
-
-  let map = new google.maps.Map($mapDiv[0], {
-    center: { lat: 51.5, lng: -0.1 },
-    zoom: 14
-  });
-  navigator.geolocation.getCurrentPosition((position) => {
-    let latLng = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
-    map.panTo(latLng);
-    map.setZoom(12);
-
-    let marker = new google.maps.Marker({
-      position: latLng,
-      animation: google.maps.Animation.DROP,
-      draggable: true,
-      map: map
-    });
-  });
 
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }
 
   if(isLoggedIn()) {
+    showMap();
     getHistEvents();
   } else {
     showLoginForm();
   }
 
+
+  function menuHandler() {
+    $('.popup').hide();
+  }
+
+
+
+
+
+  function showMap() {
+    let map = new google.maps.Map($mapDiv[0], {
+      center: { lat: 51.5, lng: -0.1 },
+      zoom: 14
+    });
+    navigator.geolocation.getCurrentPosition((position) => {
+      let latLng = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      map.panTo(latLng);
+      map.setZoom(12);
+
+      let marker = new google.maps.Marker({
+        position: latLng,
+        animation: google.maps.Animation.DROP,
+        draggable: true,
+        map: map
+      });
+    });
+  }
+
+
   function showRegisterForm() {
     if(event) event.preventDefault();
     $popup.show();
-    $popup.html(`
+    $popupContent.html(`
       <h2>Register</h2>
       <form method="post" action="/register">
         <div class="form-group">
@@ -73,7 +89,7 @@ $(() =>{
   function showLoginForm() {
     if(event) event.preventDefault();
     $popup.show();
-    $popup.html(`
+    $popupContent.html(`
       <h2>Login</h2>
       <form method="post" action="/login">
         <div class="form-group">
@@ -91,7 +107,8 @@ $(() =>{
   function showCreateForm() {
     if(event) event.preventDefault();
     console.log("new histEvent!!");
-    $popup.html(`
+    $('.popup').show();
+    $popupContent.html(`
       <h2>Create</h2>
       <form method="post" action="/histEvents">
         <div class="form-group">
@@ -122,7 +139,7 @@ $(() =>{
 
   function showEditForm(histEvent) {
     if(event) event.preventDefault();
-    $popup.html(`
+    $popupContent.html(`
       <h2>Edit HistEvent</h2>
       <form method="put" action="/histEvents/${histEvent._id}">
         <div class="form-group">
@@ -141,7 +158,6 @@ $(() =>{
 
   function handleForm() {
     if(event) event.preventDefault();
-    console.log("mutt round up");
     let token = localStorage.getItem('token');
     let $form = $(this);
 
@@ -159,6 +175,7 @@ $(() =>{
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
       $('.popup').hide();
+      showMap();
       getHistEvents();
       console.log(data);
     }).fail(showLoginForm);
@@ -236,6 +253,7 @@ $(() =>{
   function logout() {
     if(event) event.preventDefault();
     localStorage.removeItem('token');
+    $mapDiv.hide();
     showLoginForm();
   }
 });

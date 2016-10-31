@@ -4,74 +4,82 @@ $(function () {
 
   var $main = $('main');
   var $popup = $('.popup');
+  var $popupContent = $('.popupContent');
+  var $mapDiv = $('#map');
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
-  $popup.on('submit', 'form', handleForm);
-  $popup.on('click', 'button.delete', deleteHistEvent);
-  $popup.on('click', 'button.edit', getHistEvent);
+  $popupContent.on('submit', 'form', handleForm);
+  $main.on('click', 'button.delete', deleteHistEvent);
+  $main.on('click', 'button.edit', getHistEvent);
   $('.histEventsIndex').on('click', getHistEvents);
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
-
-  var $mapDiv = $('#map');
-
-  var map = new google.maps.Map($mapDiv[0], {
-    center: { lat: 51.5, lng: -0.1 },
-    zoom: 14
-  });
-  navigator.geolocation.getCurrentPosition(function (position) {
-    var latLng = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
-    map.panTo(latLng);
-    map.setZoom(12);
-
-    var marker = new google.maps.Marker({
-      position: latLng,
-      animation: google.maps.Animation.DROP,
-      draggable: true,
-      map: map
-    });
-  });
+  $('.close').on('click', menuHandler);
 
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }
 
   if (isLoggedIn()) {
+    showMap();
     getHistEvents();
   } else {
     showLoginForm();
   }
 
+  function menuHandler() {
+    $('.popup').hide();
+  }
+
+  function showMap() {
+    var map = new google.maps.Map($mapDiv[0], {
+      center: { lat: 51.5, lng: -0.1 },
+      zoom: 14
+    });
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var latLng = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      map.panTo(latLng);
+      map.setZoom(12);
+
+      var marker = new google.maps.Marker({
+        position: latLng,
+        animation: google.maps.Animation.DROP,
+        draggable: true,
+        map: map
+      });
+    });
+  }
+
   function showRegisterForm() {
     if (event) event.preventDefault();
     $popup.show();
-    $popup.html('\n      <h2>Register</h2>\n      <form method="post" action="/register">\n        <div class="form-group">\n          <input class="form-control" name="username" placeholder="Username">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">\n        </div>\n        <button class="btn btn-primary">Register</button>\n      </form>\n    ');
+    $popupContent.html('\n      <h2>Register</h2>\n      <form method="post" action="/register">\n        <div class="form-group">\n          <input class="form-control" name="username" placeholder="Username">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">\n        </div>\n        <button class="btn btn-primary">Register</button>\n      </form>\n    ');
   }
 
   function showLoginForm() {
     if (event) event.preventDefault();
     $popup.show();
-    $popup.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
+    $popupContent.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
   }
 
   function showCreateForm() {
     if (event) event.preventDefault();
     console.log("new histEvent!!");
-    $popup.html('\n      <h2>Create</h2>\n      <form method="post" action="/histEvents">\n        <div class="form-group">\n          <input class="form-control" name="histEvent" placeholder="histEvent">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="description" placeholder="description">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="image" placeholder="image url">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="year" placeholder="year">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="location" placeholder="location">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="lat" placeholder="latitude">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="lng" placeholder="longitude">\n        </div>\n        <button class="btn btn-primary">Create</button>\n      </form>\n    ');
+    $('.popup').show();
+    $popupContent.html('\n      <h2>Create</h2>\n      <form method="post" action="/histEvents">\n        <div class="form-group">\n          <input class="form-control" name="histEvent" placeholder="histEvent">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="description" placeholder="description">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="image" placeholder="image url">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="year" placeholder="year">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="location" placeholder="location">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="lat" placeholder="latitude">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="lng" placeholder="longitude">\n        </div>\n        <button class="btn btn-primary">Create</button>\n      </form>\n    ');
   }
 
   function showEditForm(histEvent) {
     if (event) event.preventDefault();
-    $popup.html('\n      <h2>Edit HistEvent</h2>\n      <form method="put" action="/histEvents/' + histEvent._id + '">\n        <div class="form-group">\n          <input class="form-control" name="histEvent" placeholder="' + histEvent.histEvent + '">\n          <input class="form-control" name="description" placeholder="' + histEvent.description + '">\n          <input class="form-control" name="image" placeholder="' + histEvent.image + '">\n          <input class="form-control" name="year" placeholder="' + histEvent.year + '">\n          <input class="form-control" name="location" placeholder="' + histEvent.location + '">\n          <input class="form-control" name="lat" placeholder="' + histEvent.latitude + '">\n          <input class="form-control" name="lng" placeholder="' + histEvent.longitude + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
+    $popupContent.html('\n      <h2>Edit HistEvent</h2>\n      <form method="put" action="/histEvents/' + histEvent._id + '">\n        <div class="form-group">\n          <input class="form-control" name="histEvent" placeholder="' + histEvent.histEvent + '">\n          <input class="form-control" name="description" placeholder="' + histEvent.description + '">\n          <input class="form-control" name="image" placeholder="' + histEvent.image + '">\n          <input class="form-control" name="year" placeholder="' + histEvent.year + '">\n          <input class="form-control" name="location" placeholder="' + histEvent.location + '">\n          <input class="form-control" name="lat" placeholder="' + histEvent.latitude + '">\n          <input class="form-control" name="lng" placeholder="' + histEvent.longitude + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
   }
 
   function handleForm() {
     if (event) event.preventDefault();
-    console.log("mutt round up");
     var token = localStorage.getItem('token');
     var $form = $(this);
 
@@ -89,6 +97,7 @@ $(function () {
     }).done(function (data) {
       if (data.token) localStorage.setItem('token', data.token);
       $('.popup').hide();
+      showMap();
       getHistEvents();
       console.log(data);
     }).fail(showLoginForm);
@@ -145,6 +154,7 @@ $(function () {
   function logout() {
     if (event) event.preventDefault();
     localStorage.removeItem('token');
+    $mapDiv.hide();
     showLoginForm();
   }
 });
