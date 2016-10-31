@@ -7,6 +7,8 @@ $(() =>{
   let $change = $('#change-map');
   let counter = 0;
 
+  let allEvents;
+  let map;
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
@@ -18,7 +20,6 @@ $(() =>{
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
-
 
   function isLoggedIn() {
     return !!localStorage.getItem('token');
@@ -42,6 +43,7 @@ $(() =>{
     $('.createHistEvent').show();
     $('.histEventsIndex').show();
     showMap();
+    getHistEvents();
   }
 
   function menuHandler() {
@@ -214,6 +216,9 @@ function showMap() {
       if (url === '/login' || url === '/register') {
         imIn();
       }
+      $('.popup').hide();
+      showMap();
+      getHistEvents();
     }).fail(showLoginForm);
   }
 
@@ -232,7 +237,9 @@ function showMap() {
     .done((data) => {
       showHistEvents(data);
       allEvents = data;
-      createHistEventMarker(data[0]);
+      $(data).each(function (i) {
+        createHistEventMarker(data[i]);
+      });
     })
     .fail(showLoginForm);
   }
@@ -307,8 +314,8 @@ function showMap() {
   function createHistEventMarker(histEvent) {
     let latLng = new google.maps.LatLng(histEvent.lat, histEvent.lng);
     let marker = new google.maps.Marker({
-    position: latLng,
-    map: map,
+      position: latLng,
+      map: map,
     });
   }
 
@@ -316,6 +323,7 @@ function showMap() {
     $.each(data.histEvents, (index, histEvent) => {
       createHistEventMarker(histEvent);
     });
+    showLoginForm();
   }
 
 });

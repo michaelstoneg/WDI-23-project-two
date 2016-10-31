@@ -9,6 +9,9 @@ $(function () {
   var $change = $('#change-map');
   var counter = 0;
 
+  var allEvents = void 0;
+  var map = void 0;
+
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
   $popupContent.on('submit', 'form', handleForm);
@@ -42,6 +45,7 @@ $(function () {
     $('.createHistEvent').show();
     $('.histEventsIndex').show();
     showMap();
+    getHistEvents();
   }
 
   function menuHandler() {
@@ -136,6 +140,9 @@ $(function () {
       if (url === '/login' || url === '/register') {
         imIn();
       }
+      $('.popup').hide();
+      showMap();
+      getHistEvents();
     }).fail(showLoginForm);
   }
 
@@ -153,7 +160,9 @@ $(function () {
     }).done(function (data) {
       showHistEvents(data);
       allEvents = data;
-      createHistEventMarker(data[0]);
+      $(data).each(function (i) {
+        createHistEventMarker(data[i]);
+      });
     }).fail(showLoginForm);
   }
 
@@ -217,5 +226,6 @@ $(function () {
     $.each(data.histEvents, function (index, histEvent) {
       createHistEventMarker(histEvent);
     });
+    showLoginForm();
   }
 });
