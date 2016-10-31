@@ -2,14 +2,15 @@ $(() =>{
 
 
   let $main = $('main');
+  let $popup = $('.popup');
 
 
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
-  $main.on('submit', 'form', handleForm);
-  $main.on('click', 'button.delete', deleteDog);
-  $main.on('click', 'button.edit', getDog);
+  $popup.on('submit', 'form', handleForm);
+  $popup.on('click', 'button.delete', deleteDog);
+  $popup.on('click', 'button.edit', getDog);
   $('.dogsIndex').on('click', getDogs);
   $('.createDog').on('click', showCreateForm);
   $('.logout').on('click', logout);
@@ -48,7 +49,8 @@ $(() =>{
 
   function showRegisterForm() {
     if(event) event.preventDefault();
-    $main.html(`
+    $popup.show();
+    $popup.html(`
       <h2>Register</h2>
       <form method="post" action="/register">
         <div class="form-group">
@@ -70,7 +72,8 @@ $(() =>{
 
   function showLoginForm() {
     if(event) event.preventDefault();
-    $main.html(`
+    $popup.show();
+    $popup.html(`
       <h2>Login</h2>
       <form method="post" action="/login">
         <div class="form-group">
@@ -88,7 +91,7 @@ $(() =>{
   function showCreateForm() {
     if(event) event.preventDefault();
     console.log("new dog!!");
-    $main.html(`
+    $popup.html(`
       <h2>Create</h2>
       <form method="post" action="/dogs">
         <div class="form-group">
@@ -109,7 +112,7 @@ $(() =>{
 
   function showEditForm(dog) {
     if(event) event.preventDefault();
-    $main.html(`
+    $popup.html(`
       <h2>Edit Dog</h2>
       <form method="put" action="/dogs/${dog._id}">
         <div class="form-group">
@@ -124,6 +127,7 @@ $(() =>{
 
   function handleForm() {
     if(event) event.preventDefault();
+    console.log("mutt round up");
     let token = localStorage.getItem('token');
     let $form = $(this);
 
@@ -140,6 +144,7 @@ $(() =>{
       }
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
+      $('.popup').hide();
       getDogs();
       console.log(data);
     }).fail(showLoginForm);
@@ -162,6 +167,7 @@ $(() =>{
 
   function showDogs(dogs) {
     let $row = $('<div class="row"></div>');
+    console.log("all dogs go to page");
     dogs.forEach((dog) => {
       $row.append(`
         <div class="col-md-4">

@@ -3,12 +3,13 @@
 $(function () {
 
   var $main = $('main');
+  var $popup = $('.popup');
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
-  $main.on('submit', 'form', handleForm);
-  $main.on('click', 'button.delete', deleteDog);
-  $main.on('click', 'button.edit', getDog);
+  $popup.on('submit', 'form', handleForm);
+  $popup.on('click', 'button.delete', deleteDog);
+  $popup.on('click', 'button.edit', getDog);
   $('.dogsIndex').on('click', getDogs);
   $('.createDog').on('click', showCreateForm);
   $('.logout').on('click', logout);
@@ -47,27 +48,30 @@ $(function () {
 
   function showRegisterForm() {
     if (event) event.preventDefault();
-    $main.html('\n      <h2>Register</h2>\n      <form method="post" action="/register">\n        <div class="form-group">\n          <input class="form-control" name="username" placeholder="Username">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">\n        </div>\n        <button class="btn btn-primary">Register</button>\n      </form>\n    ');
+    $popup.show();
+    $popup.html('\n      <h2>Register</h2>\n      <form method="post" action="/register">\n        <div class="form-group">\n          <input class="form-control" name="username" placeholder="Username">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">\n        </div>\n        <button class="btn btn-primary">Register</button>\n      </form>\n    ');
   }
 
   function showLoginForm() {
     if (event) event.preventDefault();
-    $main.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
+    $popup.show();
+    $popup.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
   }
 
   function showCreateForm() {
     if (event) event.preventDefault();
     console.log("new dog!!");
-    $main.html('\n      <h2>Create</h2>\n      <form method="post" action="/dogs">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="name">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="breed" placeholder="breed">\n        </div>\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="age" placeholder="age">\n        </div>\n        <button class="btn btn-primary">Create</button>\n      </form>\n    ');
+    $popup.html('\n      <h2>Create</h2>\n      <form method="post" action="/dogs">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="name">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="breed" placeholder="breed">\n        </div>\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="age" placeholder="age">\n        </div>\n        <button class="btn btn-primary">Create</button>\n      </form>\n    ');
   }
 
   function showEditForm(dog) {
     if (event) event.preventDefault();
-    $main.html('\n      <h2>Edit Dog</h2>\n      <form method="put" action="/dogs/' + dog._id + '">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="' + dog.name + '">\n          <input class="form-control" name="breed" placeholder="' + dog.breed + '">\n          <input class="form-control" name="age" placeholder="' + dog.age + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
+    $popup.html('\n      <h2>Edit Dog</h2>\n      <form method="put" action="/dogs/' + dog._id + '">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="' + dog.name + '">\n          <input class="form-control" name="breed" placeholder="' + dog.breed + '">\n          <input class="form-control" name="age" placeholder="' + dog.age + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
   }
 
   function handleForm() {
     if (event) event.preventDefault();
+    console.log("mutt round up");
     var token = localStorage.getItem('token');
     var $form = $(this);
 
@@ -84,6 +88,7 @@ $(function () {
       }
     }).done(function (data) {
       if (data.token) localStorage.setItem('token', data.token);
+      $('.popup').hide();
       getDogs();
       console.log(data);
     }).fail(showLoginForm);
@@ -104,6 +109,7 @@ $(function () {
 
   function showDogs(dogs) {
     var $row = $('<div class="row"></div>');
+    console.log("all dogs go to page");
     dogs.forEach(function (dog) {
       $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/originals/cf/63/54/cf6354ef04148220314dc3610d8f8cdd.jpg" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + dog.name + '</h4>\n              <p class="card-text">' + dog.breed + ', ' + dog.age + '</p>\n            </div>\n          </div>\n          <button class="btn btn-danger delete" data-id="' + dog._id + '">Delete</button>\n          <button class="btn btn-primary edit" data-id="' + dog._id + '">Edit</button>\n        </div>\n      ');
     });
