@@ -9,10 +9,10 @@ $(() =>{
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
   $popup.on('submit', 'form', handleForm);
-  $popup.on('click', 'button.delete', deleteDog);
-  $popup.on('click', 'button.edit', getDog);
-  $('.dogsIndex').on('click', getDogs);
-  $('.createDog').on('click', showCreateForm);
+  $popup.on('click', 'button.delete', deleteHistEvent);
+  $popup.on('click', 'button.edit', getHistEvent);
+  $('.histEventsIndex').on('click', getHistEvents);
+  $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
 
   let $mapDiv = $('#map');
@@ -42,7 +42,7 @@ $(() =>{
   }
 
   if(isLoggedIn()) {
-    getDogs();
+    getHistEvents();
   } else {
     showLoginForm();
   }
@@ -90,35 +90,49 @@ $(() =>{
 
   function showCreateForm() {
     if(event) event.preventDefault();
-    console.log("new dog!!");
+    console.log("new histEvent!!");
     $popup.html(`
       <h2>Create</h2>
-      <form method="post" action="/dogs">
+      <form method="post" action="/histEvents">
         <div class="form-group">
-          <input class="form-control" name="name" placeholder="name">
+          <input class="form-control" name="histEvent" placeholder="histEvent">
         </div>
         <div class="form-group">
-          <input class="form-control" name="breed" placeholder="breed">
-        </div>
+          <input class="form-control" name="description" placeholder="description">
         </div>
         <div class="form-group">
-          <input class="form-control" name="age" placeholder="age">
+          <input class="form-control" name="image" placeholder="image url">
+        </div>
+        <div class="form-group">
+          <input class="form-control" name="year" placeholder="year">
+        </div>
+        <div class="form-group">
+          <input class="form-control" name="location" placeholder="location">
+        </div>
+        <div class="form-group">
+          <input class="form-control" name="lat" placeholder="latitude">
+        </div>
+        <div class="form-group">
+          <input class="form-control" name="lng" placeholder="longitude">
         </div>
         <button class="btn btn-primary">Create</button>
       </form>
     `);
   }
 
-
-  function showEditForm(dog) {
+  function showEditForm(histEvent) {
     if(event) event.preventDefault();
     $popup.html(`
-      <h2>Edit Dog</h2>
-      <form method="put" action="/dogs/${dog._id}">
+      <h2>Edit HistEvent</h2>
+      <form method="put" action="/histEvents/${histEvent._id}">
         <div class="form-group">
-          <input class="form-control" name="name" placeholder="${dog.name}">
-          <input class="form-control" name="breed" placeholder="${dog.breed}">
-          <input class="form-control" name="age" placeholder="${dog.age}">
+          <input class="form-control" name="histEvent" placeholder="${histEvent.histEvent}">
+          <input class="form-control" name="description" placeholder="${histEvent.description}">
+          <input class="form-control" name="image" placeholder="${histEvent.image}">
+          <input class="form-control" name="year" placeholder="${histEvent.year}">
+          <input class="form-control" name="location" placeholder="${histEvent.location}">
+          <input class="form-control" name="lat" placeholder="${histEvent.latitude}">
+          <input class="form-control" name="lng" placeholder="${histEvent.longitude}">
         </div>
         <button class="btn btn-primary">Update</button>
       </form>
@@ -145,41 +159,42 @@ $(() =>{
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
       $('.popup').hide();
-      getDogs();
+      getHistEvents();
       console.log(data);
     }).fail(showLoginForm);
   }
 
-  function getDogs() {
+  function getHistEvents() {
     if(event) event.preventDefault();
 
     let token = localStorage.getItem('token');
     $.ajax({
-      url: '/dogs',
+      url: '/histEvents',
       method: "GET",
       beforeSend: function(jqXHR) {
         if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
       }
     })
-    .done(showDogs)
+    .done(showHistEvents)
     .fail(showLoginForm);
   }
 
-  function showDogs(dogs) {
+  function showHistEvents(histEvents) {
     let $row = $('<div class="row"></div>');
-    console.log("all dogs go to page");
-    dogs.forEach((dog) => {
+    histEvents.forEach((histEvent) => {
       $row.append(`
         <div class="col-md-4">
           <div class="card">
-            <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/originals/cf/63/54/cf6354ef04148220314dc3610d8f8cdd.jpg" alt="Card image cap">
+            <img class="card-img-top" src="${histEvent.image}" alt="Card image cap">
             <div class="card-block">
-              <h4 class="card-title">${dog.name}</h4>
-              <p class="card-text">${dog.breed}, ${dog.age}</p>
+              <h4 class="card-title">${histEvent.histEvent}</h4>
+              <h5 class="card-title">${histEvent.year}</h5>
+              <h5 class="card-title">${histEvent.location}</h5>
+              <p class="card-text">${histEvent.description}</p>
             </div>
           </div>
-          <button class="btn btn-danger delete" data-id="${dog._id}">Delete</button>
-          <button class="btn btn-primary edit" data-id="${dog._id}">Edit</button>
+          <button class="btn btn-danger delete" data-id="${histEvent._id}">Delete</button>
+          <button class="btn btn-primary edit" data-id="${histEvent._id}">Edit</button>
         </div>
       `);
     });
@@ -188,27 +203,27 @@ $(() =>{
 
   }
 
-  function deleteDog() {
+  function deleteHistEvent() {
     let id = $(this).data('id');
     let token = localStorage.getItem('token');
 
     $.ajax({
-      url: `/dogs/${id}`,
+      url: `/histEvents/${id}`,
       method: "DELETE",
       beforeSend: function(jqXHR) {
         if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
       }
     })
-    .done(getDogs)
+    .done(getHistEvents)
     .fail(showLoginForm);
   }
 
-  function getDog() {
+  function getHistEvent() {
     let id = $(this).data('id');
     let token = localStorage.getItem('token');
 
     $.ajax({
-      url: `/dogs/${id}`,
+      url: `/histEvents/${id}`,
       method: "GET",
       beforeSend: function(jqXHR) {
         if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
