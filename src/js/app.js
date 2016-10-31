@@ -1,13 +1,11 @@
 $(() =>{
 
-
   let $main = $('main');
   let $popup = $('.popup');
   let $popupContent = $('.popupContent');
   let $mapDiv = $('#map');
-
-
-
+  let allEvents;
+  let map;
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
@@ -18,7 +16,6 @@ $(() =>{
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
-
 
   function isLoggedIn() {
     return !!localStorage.getItem('token');
@@ -31,17 +28,12 @@ $(() =>{
     showLoginForm();
   }
 
-
   function menuHandler() {
     $('.popup').hide();
   }
 
-
-
-
-
   function showMap() {
-    let map = new google.maps.Map($mapDiv[0], {
+    map = new google.maps.Map($mapDiv[0], {
       center: { lat: 51.5, lng: -0.1 },
       zoom: 14
     });
@@ -61,7 +53,6 @@ $(() =>{
       });
     });
   }
-
 
   function showRegisterForm() {
     if(event) event.preventDefault();
@@ -103,10 +94,8 @@ $(() =>{
     `);
   }
 
-
   function showCreateForm() {
     if(event) event.preventDefault();
-    console.log("new histEvent!!");
     $('.popup').show();
     $popupContent.html(`
       <h2>Create</h2>
@@ -132,6 +121,9 @@ $(() =>{
         <div class="form-group">
           <input class="form-control" name="lng" placeholder="longitude">
         </div>
+        <div class="form-group">
+          <input class="form-control" name="period" placeholder="period">
+        </div>
         <button class="btn btn-primary">Create</button>
       </form>
     `);
@@ -139,17 +131,19 @@ $(() =>{
 
   function showEditForm(histEvent) {
     if(event) event.preventDefault();
+    $popup.show();
     $popupContent.html(`
       <h2>Edit HistEvent</h2>
       <form method="put" action="/histEvents/${histEvent._id}">
         <div class="form-group">
-          <input class="form-control" name="histEvent" placeholder="${histEvent.histEvent}">
-          <input class="form-control" name="description" placeholder="${histEvent.description}">
-          <input class="form-control" name="image" placeholder="${histEvent.image}">
-          <input class="form-control" name="year" placeholder="${histEvent.year}">
-          <input class="form-control" name="location" placeholder="${histEvent.location}">
-          <input class="form-control" name="lat" placeholder="${histEvent.latitude}">
-          <input class="form-control" name="lng" placeholder="${histEvent.longitude}">
+          <input class="form-control" name="histEvent" value="${histEvent.histEvent}">
+          <input class="form-control" name="description" value="${histEvent.description}">
+          <input class="form-control" name="image" value="${histEvent.image}">
+          <input class="form-control" name="year" value="${histEvent.year}">
+          <input class="form-control" name="location" value="${histEvent.location}">
+          <input class="form-control" name="lat" value="${histEvent.latitude}">
+          <input class="form-control" name="lng" value="${histEvent.longitude}">
+          <input class="form-control" name="lng" value="${histEvent.period}">
         </div>
         <button class="btn btn-primary">Update</button>
       </form>
@@ -177,22 +171,26 @@ $(() =>{
       $('.popup').hide();
       showMap();
       getHistEvents();
-      console.log(data);
     }).fail(showLoginForm);
   }
 
   function getHistEvents() {
     if(event) event.preventDefault();
+    let period = "Rome";
 
     let token = localStorage.getItem('token');
     $.ajax({
-      url: '/histEvents',
+      url: `/histEvents?period=${period}`,
       method: "GET",
       beforeSend: function(jqXHR) {
         if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
       }
     })
-    .done(showHistEvents)
+    .done((data) => {
+      showHistEvents(data);
+      allEvents = data;
+      createHistEventMarker(data[0]);
+    })
     .fail(showLoginForm);
   }
 
@@ -256,4 +254,19 @@ $(() =>{
     $mapDiv.hide();
     showLoginForm();
   }
+
+  function createHistEventMarker(histEvent) {
+    let latLng = new google.maps.LatLng(histEvent.lat, histEvent.lng);
+    let marker = new google.maps.Marker({
+    position: latLng,
+    map: map,
+    });
+  }
+
+  function loopThroughHistEvents(data) {
+    $.each(data.histEvents, (index, histEvent) => {
+      createHistEventMarker(histEvent);
+    });
+  }
+
 });

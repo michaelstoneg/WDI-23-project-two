@@ -9,7 +9,7 @@ function histEventsCreate(req, res) {
 }
 
 function histEventsIndex(req, res) {
- HistEvent.find((err, histEvents) => {
+ HistEvent.find(req.query, (err, histEvents) => {
    if (err) return res.status(500).json({ success: false, message: err });
    if (!histEvents) return res.status(500).json({ success: false, message: "No histEvents found" });
    return res.status(200).json(histEvents);

@@ -6,8 +6,9 @@ const histEventSchema = new mongoose.Schema ({
   image:        { type: String, trim: true },
   year:         { type: Number, trim: true },
   location:     { type: String, trim: true },
-  lat:          { type: Number, time: true },
-  lng:          { type: Number, time: true }
+  lat:          { type: Number, trim: true },
+  lng:          { type: Number, trim: true },
+  period:       { type: String, trim: true }
 });
 
 module.exports = mongoose.model("HistEvent", histEventSchema);
