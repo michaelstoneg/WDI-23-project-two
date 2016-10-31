@@ -1,23 +1,20 @@
-"use strict";
+'use strict';
 
 var myVariable = void 0;
 $(function () {
 
   var $main = $('main');
 
-  // $('.register').on('click', showRegisterForm);
-  // $('.login').on('click', showLoginForm);
-  // $main.on('submit', 'form', handleForm);
-  // $main.on('click', 'button.delete', deleteDog);
-  // $main.on('click', 'button.edit', getDog);
-  // $('.dogsIndex').on('click', getDogs);
-  // $('.createDog').on('click', showCreateForm);
-  // $('.logout').on('click', logout)function initMap() {
+  $('.register').on('click', showRegisterForm);
+  $('.login').on('click', showLoginForm);
+  $main.on('submit', 'form', handleForm);
+  $main.on('click', 'button.delete', deleteDog);
+  $main.on('click', 'button.edit', getDog);
+  $('.dogsIndex').on('click', getDogs);
+  $('.createDog').on('click', showCreateForm);
 
-  // let myVariable;
-
-  // let url = "https://en.wikipedia.org/w/api.php?action=opensearch&search="+ "uluru" +"&format=json&callback=?";
-  var url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + "uluru" + "&format=json&callback=?";
+  var wikiSearch = "general assembly";
+  var url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + wikiSearch + "&format=json&callback=?";
 
   $.ajax({
     url: url,
@@ -29,7 +26,8 @@ $(function () {
   }).done(updateData).fail();
 
   function updateData(data) {
-    myVariable = data.query.pages[133260].extract;
+    console.log(data);
+    myVariable = data.query.pages[633042].extract;
     console.log(myVariable);
     var contentString = '<div id="content">' + '<div id="siteNotice">' + '</div>' + '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' + '<div id="bodyContent">' + '<p>' + myVariable + '</p>' + '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' + 'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' + '(last visited June 22, 2009).</p>' + '</div>' + '</div>';
     var infowindow = new google.maps.InfoWindow({
@@ -50,186 +48,112 @@ $(function () {
     zoom: 4,
     center: uluru
   });
+
+  function isLoggedIn() {
+    return !!localStorage.getItem('token');
+  }
+
+  if (isLoggedIn()) {
+    getDogs();
+  } else {
+    showLoginForm();
+  }
+
+  function showRegisterForm() {
+    if (event) event.preventDefault();
+    $main.html('\n      <h2>Register</h2>\n      <form method="post" action="/register">\n        <div class="form-group">\n          <input class="form-control" name="username" placeholder="Username">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">\n        </div>\n        <button class="btn btn-primary">Register</button>\n      </form>\n    ');
+  }
+
+  function showLoginForm() {
+    if (event) event.preventDefault();
+    $main.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
+  }
+
+  function showCreateForm() {
+    if (event) event.preventDefault();
+    console.log("new dog!!");
+    $main.html('\n      <h2>Create</h2>\n      <form method="post" action="/dogs">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="name">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="breed" placeholder="breed">\n        </div>\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="age" placeholder="age">\n        </div>\n        <button class="btn btn-primary">Create</button>\n      </form>\n    ');
+  }
+
+  function showEditForm(dog) {
+    if (event) event.preventDefault();
+    $main.html('\n      <h2>Edit Dog</h2>\n      <form method="put" action="/dogs/' + dog._id + '">\n        <div class="form-group">\n          <input class="form-control" name="name" placeholder="' + dog.name + '">\n          <input class="form-control" name="breed" placeholder="' + dog.breed + '">\n          <input class="form-control" name="age" placeholder="' + dog.age + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
+  }
+
+  function handleForm() {
+    if (event) event.preventDefault();
+    var token = localStorage.getItem('token');
+    var $form = $(this);
+
+    var url = $form.attr('action');
+    var method = $form.attr('method');
+    var data = $form.serialize();
+
+    $.ajax({
+      url: url,
+      method: method,
+      data: data,
+      beforeSend: function beforeSend(jqXHR) {
+        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+      }
+    }).done(function (data) {
+      if (data.token) localStorage.setItem('token', data.token);
+      getDogs();
+      console.log(data);
+    }).fail(showLoginForm);
+  }
+
+  function getDogs() {
+    if (event) event.preventDefault();
+
+    var token = localStorage.getItem('token');
+    $.ajax({
+      url: '/dogs',
+      method: "GET",
+      beforeSend: function beforeSend(jqXHR) {
+        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+      }
+    }).done(showDogs).fail(showLoginForm);
+  }
+
+  function showDogs(dogs) {
+    var $row = $('<div class="row"></div>');
+    dogs.forEach(function (dog) {
+      $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/originals/cf/63/54/cf6354ef04148220314dc3610d8f8cdd.jpg" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + dog.name + '</h4>\n              <p class="card-text">' + dog.breed + ', ' + dog.age + '</p>\n            </div>\n          </div>\n          <button class="btn btn-danger delete" data-id="' + dog._id + '">Delete</button>\n          <button class="btn btn-primary edit" data-id="' + dog._id + '">Edit</button>\n        </div>\n      ');
+    });
+
+    $main.html($row);
+  }
+
+  function deleteDog() {
+    var id = $(this).data('id');
+    var token = localStorage.getItem('token');
+
+    $.ajax({
+      url: '/dogs/' + id,
+      method: "DELETE",
+      beforeSend: function beforeSend(jqXHR) {
+        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+      }
+    }).done(getDogs).fail(showLoginForm);
+  }
+
+  function getDog() {
+    var id = $(this).data('id');
+    var token = localStorage.getItem('token');
+
+    $.ajax({
+      url: '/dogs/' + id,
+      method: "GET",
+      beforeSend: function beforeSend(jqXHR) {
+        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+      }
+    }).done(showEditForm).fail(showLoginForm);
+  }
+
+  function logout() {
+    if (event) event.preventDefault();
+    localStorage.removeItem('token');
+    showLoginForm();
+  }
 });
-//   function isLoggedIn() {
-//     return !!localStorage.getItem('token');
-//   }
-//
-//   if(isLoggedIn()) {
-//     getDogs();
-//   } else {
-//     showLoginForm();
-//   }
-//
-//   function showRegisterForm() {
-//     if(event) event.preventDefault();
-//     $main.html(`
-//       <h2>Register</h2>
-//       <form method="post" action="/register">
-//         <div class="form-group">
-//           <input class="form-control" name="username" placeholder="Username">
-//         </div>
-//         <div class="form-group">
-//           <input class="form-control" name="email" placeholder="Email">
-//         </div>
-//         <div class="form-group">
-//           <input class="form-control" type="password" name="password" placeholder="Password">
-//         </div>
-//         <div class="form-group">
-//           <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">
-//         </div>
-//         <button class="btn btn-primary">Register</button>
-//       </form>
-//     `);
-//   }
-//
-//   function showLoginForm() {
-//     if(event) event.preventDefault();
-//     $main.html(`
-//       <h2>Login</h2>
-//       <form method="post" action="/login">
-//         <div class="form-group">
-//           <input class="form-control" name="email" placeholder="Email">
-//         </div>
-//         <div class="form-group">
-//           <input class="form-control" type="password" name="password" placeholder="Password">
-//         </div>
-//         <button class="btn btn-primary">Login</button>
-//       </form>
-//     `);
-//   }
-//
-//
-//   function showCreateForm() {
-//     if(event) event.preventDefault();
-//     console.log("new dog!!");
-//     $main.html(`
-//       <h2>Create</h2>
-//       <form method="post" action="/dogs">
-//         <div class="form-group">
-//           <input class="form-control" name="name" placeholder="name">
-//         </div>
-//         <div class="form-group">
-//           <input class="form-control" name="breed" placeholder="breed">
-//         </div>
-//         </div>
-//         <div class="form-group">
-//           <input class="form-control" name="age" placeholder="age">
-//         </div>
-//         <button class="btn btn-primary">Create</button>
-//       </form>
-//     `);
-//   }
-//
-//
-//   function showEditForm(dog) {
-//     if(event) event.preventDefault();
-//     $main.html(`
-//       <h2>Edit Dog</h2>
-//       <form method="put" action="/dogs/${dog._id}">
-//         <div class="form-group">
-//           <input class="form-control" name="name" placeholder="${dog.name}">
-//           <input class="form-control" name="breed" placeholder="${dog.breed}">
-//           <input class="form-control" name="age" placeholder="${dog.age}">
-//         </div>
-//         <button class="btn btn-primary">Update</button>
-//       </form>
-//     `);
-//   }
-//
-//   function handleForm() {
-//     if(event) event.preventDefault();
-//     let token = localStorage.getItem('token');
-//     let $form = $(this);
-//
-//     let url = $form.attr('action');
-//     let method = $form.attr('method');
-//     let data = $form.serialize();
-//
-//     $.ajax({
-//       url,
-//       method,
-//       data,
-//       beforeSend: function(jqXHR) {
-//         if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-//       }
-//     }).done((data) => {
-//       if(data.token) localStorage.setItem('token', data.token);
-//       getDogs();
-//       console.log(data);
-//     }).fail(showLoginForm);
-//   }
-//
-//   function getDogs() {
-//     if(event) event.preventDefault();
-//
-//     let token = localStorage.getItem('token');
-//     $.ajax({
-//       url: '/dogs',
-//       method: "GET",
-//       beforeSend: function(jqXHR) {
-//         if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-//       }
-//     })
-//     .done(showDogs)
-//     .fail(showLoginForm);
-//   }
-//
-//   function showDogs(dogs) {
-//     let $row = $('<div class="row"></div>');
-//     dogs.forEach((dog) => {
-//       $row.append(`
-//         <div class="col-md-4">
-//           <div class="card">
-//             <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/originals/cf/63/54/cf6354ef04148220314dc3610d8f8cdd.jpg" alt="Card image cap">
-//             <div class="card-block">
-//               <h4 class="card-title">${dog.name}</h4>
-//               <p class="card-text">${dog.breed}, ${dog.age}</p>
-//             </div>
-//           </div>
-//           <button class="btn btn-danger delete" data-id="${dog._id}">Delete</button>
-//           <button class="btn btn-primary edit" data-id="${dog._id}">Edit</button>
-//         </div>
-//       `);
-//     });
-//
-//     $main.html($row);
-//
-//   }
-//
-//   function deleteDog() {
-//     let id = $(this).data('id');
-//     let token = localStorage.getItem('token');
-//
-//     $.ajax({
-//       url: `/dogs/${id}`,
-//       method: "DELETE",
-//       beforeSend: function(jqXHR) {
-//         if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-//       }
-//     })
-//     .done(getDogs)
-//     .fail(showLoginForm);
-//   }
-//
-//   function getDog() {
-//     let id = $(this).data('id');
-//     let token = localStorage.getItem('token');
-//
-//     $.ajax({
-//       url: `/dogs/${id}`,
-//       method: "GET",
-//       beforeSend: function(jqXHR) {
-//         if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-//       }
-//     })
-//     .done(showEditForm)
-//     .fail(showLoginForm);
-//   }
-//
-//   function logout() {
-//     if(event) event.preventDefault();
-//     localStorage.removeItem('token');
-//     showLoginForm();
-//   }
-// });
