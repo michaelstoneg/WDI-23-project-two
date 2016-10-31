@@ -5,13 +5,14 @@ $(() =>{
   let $popup = $('.popup');
   let $popupContent = $('.popupContent');
   let $mapDiv = $('#map');
-
-
+  let $change = $('#change-map');
+  let counter = 0;
 
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
   $popupContent.on('submit', 'form', handleForm);
+  $change.on('click', showMap);
   $main.on('click', 'button.delete', deleteHistEvent);
   $main.on('click', 'button.edit', getHistEvent);
   $('.histEventsIndex').on('click', getHistEvents);
@@ -20,10 +21,41 @@ $(() =>{
   $('.close').on('click', menuHandler);
 
 
-  let $change = $('#change-map');
-  let counter = 0;
 
-  $change.on('click', showMap);
+  function isLoggedIn() {
+    return !!localStorage.getItem('token');
+  }
+
+  if(isLoggedIn()) {
+    imIn();
+  } else {
+    $mapDiv.hide();
+    $change.hide();
+    $('.createHistEvent').hide();
+    $('.histEventsIndex').hide();
+  }
+
+  function imIn() {
+    console.log("logged in");
+    $('.popup').hide();
+    $('.register').hide();
+    $('.login').hide();
+    $change.show();
+    $('.createHistEvent').show();
+    $('.histEventsIndex').show();
+    showMap();
+  }
+
+  function menuHandler() {
+    $('.popup').hide();
+  }
+
+
+
+function showMap() {
+
+  console.log("maps 4 u");
+  $mapDiv.show();
 
   const locations = [
     {
@@ -48,8 +80,6 @@ $(() =>{
     }
   ];
 
-  function showMap() {
-    console.log("hello");
     let center = locations[counter].center;
     let styles = locations[counter].styles;
 
@@ -67,23 +97,6 @@ $(() =>{
     });
 
     counter++;
-  }
-
-
-  function isLoggedIn() {
-    return !!localStorage.getItem('token');
-  }
-
-  if(isLoggedIn()) {
-    showMap();
-    getHistEvents();
-  } else {
-    showLoginForm();
-  }
-
-
-  function menuHandler() {
-    $('.popup').hide();
   }
 
 
@@ -198,10 +211,10 @@ $(() =>{
       }
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
-      $('.popup').hide();
-      showMap();
-      getHistEvents();
       console.log(data);
+      if (url === '/login' || url === '/register') {
+        imIn();
+      }
     }).fail(showLoginForm);
   }
 
@@ -278,6 +291,12 @@ $(() =>{
     if(event) event.preventDefault();
     localStorage.removeItem('token');
     $mapDiv.hide();
-    showLoginForm();
+    $change.hide();
+    $('.createHistEvent').hide();
+    $('.histEventsIndex').hide();
+    $('.register').show();
+    $('.login').show();
+    counter = 0;
+    // showLoginForm();
   }
 });

@@ -13,36 +13,25 @@
     <script src="/js/app.js" charset="utf-8"></script>
   </head>
   <body>
-    <nav class="navbar navbar-light bg-faded">
-      <div class="container">
-        <a class="navbar-brand" href="#">TimeTravlr</a>
-        <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar2" aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
-          &#9776;
-        </button>
-        <div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
-          <ul class="nav navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link usersIndex loggedIn" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link histEventsIndex loggedIn" href="#">Events</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link createHistEvent loggedIn" href="#">Create</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link register loggedOut" href="#">Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link login loggedOut" href="#">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link logout loggedIn" href="#">Logout</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+
+
+    <ul class="nav nav-pills">
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Main Menu</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item usersIndex loggedIn" href="#">Home</a>
+      <a class="dropdown-item histEventsIndex loggedIn" href="#">Events</a>
+      <a class="dropdown-item createHistEvent loggedIn" href="#">Create</a>
+      <a class="dropdown-item timeJump loggedIn" id="change-map" href="#">Warp</a>
+      <a class="dropdown-item register loggedOut" href="#">Register</a>
+      <a class="dropdown-item login loggedOut" href="#">Login</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item logout loggedIn" href="#">Logout</a>
+    </div>
+  </li>
+</ul>
+
+
     <div class="popup" >
       <button class="close" type="button" name="button">X</button>
       <div class="popupContent"></div>
@@ -51,6 +40,5 @@
 
     </main>
     <div id="map"></div>
-      <button id="change-map" type="button" name="button">Change</button>
   </body>
 </html>
