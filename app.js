@@ -9,7 +9,7 @@ let mongoUri = process.env.MONGODB_URI || "mongodb://localhost/newapi";
 
 mongoose.connect(mongoUri);
 
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/src`));
 app.use(morgan('dev'));
 
 app.get(`/`,(req,res) => res.render('index'));
