@@ -1,4 +1,5 @@
-let myVariable;
+let summary;
+let title;
 $(() => {
 
 
@@ -14,7 +15,7 @@ $(() => {
   $('.dogsIndex').on('click', getDogs);
   $('.createDog').on('click', showCreateForm);
 
-  let wikiSearch = "general assembly";
+  let wikiSearch = "general assembly"; // put search item into here
   let url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + wikiSearch + "&format=json&callback=?";
 
   $.ajax({
@@ -28,14 +29,15 @@ $(() => {
 
   function updateData(data) {
     console.log(data);
-    myVariable = data.query.pages[633042].extract;
-    console.log(myVariable);
+    title = data.query.pages[633042].title;
+    summary = data.query.pages[633042].extract;
+    console.log(summary);
     var contentString = '<div id="content">'+
                 '<div id="siteNotice">'+
                 '</div>'+
-                '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+                '<h1 id="firstHeading" class="firstHeading">' + title + '</h1>'+ // Input title on this line
                 '<div id="bodyContent">'+
-                '<p>' + myVariable + '</p>'+
+                '<p>' + summary + '</p>'+ // Input summary on this line
                 '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
                 'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
                 '(last visited June 22, 2009).</p>'+
@@ -45,20 +47,21 @@ $(() => {
       content: contentString
     });
     var marker = new google.maps.Marker({
-      position: uluru,
+      position: london,
       map: map,
       title: 'Uluru (Ayers Rock)'
     });
     marker.addListener('click', function() {
       infowindow.open(map, marker);
+      console.log("marker clicked");
     });
 
   }
 
-  var uluru = {lat: -25.363, lng: 131.044};
+  var london = {lat: 51.509865, lng: -0.118092};
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 4,
-    center: uluru
+    zoom: 10,
+    center: london
   });
 
 
