@@ -13,7 +13,7 @@ $(() => {
   let allEvents = [];
   let map;
   let myLocation;
-  let markers;
+  let markers = [];
   let portals;
 
   $('.register').on('click', showRegisterForm);
@@ -78,10 +78,11 @@ for(var key in obj) {
     //   map: map,
     //   // title: 'Uluru (Ayers Rock)'
     // });
-    markers.addListener('click', function() {
-      infowindow.open(map, markers);
-      console.log("marker clicked");
-    });
+    $(markers).each(function (i) {
+          markers[i].addListener('click', function() {
+            infowindow.open(map, markers[i]);
+        });
+      });
 
   }
 
@@ -222,7 +223,7 @@ function showMap() {
 
 
     $('.hud').html(`<p>Period:${periods},  Location:${name}, lat:${myLocation.lat}lng:${myLocation.lng}</p>`);
-    // getHistEvents();
+    getHistEvents();
     counter++;
   }
 
@@ -347,7 +348,6 @@ function showMap() {
         imIn();
       }
       $('.popup').hide();
-      getHistEvents();
     }).fail(showLoginForm);
   }
 
@@ -366,7 +366,7 @@ function showMap() {
       showHistEvents(data);
       $(data).each(function (i) {
         createHistEventMarker(data[i]);
-        console.log(data, "event object");
+        // console.log(data, "event object");
         displayWindow(data[i]);
       });
     })
@@ -442,10 +442,10 @@ function showMap() {
 
   function createHistEventMarker(histEvent) {
     let latLng = { lat:histEvent.lat, lng:histEvent.lng};
-    markers = new google.maps.Marker({
+    markers.push(new google.maps.Marker({
       position: latLng,
       map
-    });
+    }));
     console.log("new coords", latLng);
     console.log("new marker", markers);
   }
