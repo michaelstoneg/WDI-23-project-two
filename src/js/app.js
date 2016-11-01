@@ -13,41 +13,54 @@ $(() => {
   let allEvents = [];
   let map;
   let myLocation;
+  let markers;
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
   $popupContent.on('submit', 'form', handleForm);
   $change.on('click', showMap);
-  $main.on('click', 'button.delete', deleteHistEvent);
-  $main.on('click', 'button.edit', getHistEvent);
+  $popup.on('click', 'button.delete', deleteHistEvent);
+  $popup.on('click', 'button.edit', getHistEvent);
   $('.histEventsIndex').on('click', getHistEvents);
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
 
-  let wikiSearch = "general assembly"; // put search item into here
-  let url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + wikiSearch + "&format=json&callback=?";
+function displayWindow(data) {
+  console.log(data, "displaywindow");
+  let wikiSearch = data.histEvent; // put search item into here
 
   $.ajax({
-    url: url,
-    type: "GET",
-    contentType: "application/json; charset=utf-8",
-    async: false,
-    dataType: "json",
-    global: false,
-  }).done(updateData).fail();
+    url: "/wikipedia",
+    method: "GET",
+    data: {
+      prop: 'pageimages|title|extracts',
+      titles: wikiSearch
+    }
+  }).done(updateData)
+  .fail();
+}
 
   function updateData(data) {
     console.log(data);
-    title = data.query.pages[633042].title;
-    summary = data.query.pages[633042].extract;
+    var obj = data.query.pages;
+for(var key in obj) {
+    console.log('key: ' + key + '\n' + 'value: ' + obj[key]);
+}
+    // console.log("wiki stuff", data.query.pages{});
+    console.log(data);
+    title = data.query.pages[key].title;
+    summary = data.query.pages[key].extract;
+    let image = data.query.pages[key].thumbnail.source;
+    let intro = summary.substring(0, 500);
+    console.log(intro, "this is intro log");
     console.log(summary);
     var contentString = '<div id="content">'+
                 '<div id="siteNotice">'+
                 '</div>'+
                 '<h1 id="firstHeading" class="firstHeading">' + title + '</h1>'+ // Input title on this line
                 '<div id="bodyContent">'+
-                '<p>' + summary + '</p>'+ // Input summary on this line
+                '<p>' + intro + '</p>'+ '<img src='+ image + '>' + // Input summary on this line
                 '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
                 'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
                 '(last visited June 22, 2009).</p>'+
@@ -56,13 +69,13 @@ $(() => {
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
-    var marker = new google.maps.Marker({
-      position: london,
-      map: map,
-      title: 'Uluru (Ayers Rock)'
-    });
-    marker.addListener('click', function() {
-      infowindow.open(map, marker);
+    // var marker = new google.maps.Marker({
+    //   // position: london,
+    //   map: map,
+    //   // title: 'Uluru (Ayers Rock)'
+    // });
+    markers.addListener('click', function() {
+      infowindow.open(map, markers);
       console.log("marker clicked");
     });
 
@@ -301,6 +314,8 @@ function showMap() {
       showHistEvents(data);
       $(data).each(function (i) {
         createHistEventMarker(data[i]);
+        console.log(data, "event object");
+        displayWindow(data[i]);
       });
     })
     .fail(showLoginForm);
@@ -375,7 +390,7 @@ function showMap() {
 
   function createHistEventMarker(histEvent) {
     let latLng = { lat:histEvent.lat, lng:histEvent.lng};
-    let markers = new google.maps.Marker({
+    markers = new google.maps.Marker({
       position: latLng,
       map
     });

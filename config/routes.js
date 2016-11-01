@@ -2,6 +2,7 @@ const express = require("express");
 const router  = express.Router();
 const histEventsController = require("../controllers/histEvents");
 const authController = require('../controllers/auth');
+const wikipediaController = require('../controllers/wikipedia');
 const jwt    = require("jsonwebtoken");
 
 const secret  =  require('./tokens').secret;
@@ -21,6 +22,9 @@ function secureRoute(req, res, next) {
     next();
   });
 }
+
+router.route('/wikipedia')
+  .get(wikipediaController.show);
 
 router.route("/register")
   .post(authController.register);
