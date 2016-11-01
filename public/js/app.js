@@ -15,7 +15,7 @@ $(function () {
   var allEvents = [];
   var map = void 0;
   var myLocation = void 0;
-  var markers = void 0;
+  var markers = [];
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
@@ -29,7 +29,7 @@ $(function () {
   $('.close').on('click', menuHandler);
 
   function displayWindow(data) {
-    console.log(data, "displaywindow");
+    // console.log(data, "displaywindow");
 
     var wikiSearch = data.histEvent; // put search item into here
 
@@ -44,19 +44,12 @@ $(function () {
   }
 
   function updateData(data) {
-    console.log('markers: ', markers);
     var obj = data.query.pages;
-    for (var key in obj) {
-      console.log('key: ' + key + '\n' + 'value: ' + obj[key]);
-    }
-    // console.log("wiki stuff", data.query.pages{});
-    console.log('WikipediA: ', data);
+    for (var key in obj) {}
     title = data.query.pages[key].title;
     summary = data.query.pages[key].extract;
     var image = data.query.pages[key].thumbnail.source;
     var intro = summary.substring(0, 500);
-    console.log(intro, "this is intro log");
-    console.log(summary);
     var contentString = '<div id="content">' + '<div id="siteNotice">' + '</div>' + '<h1 id="firstHeading" class="firstHeading">' + title + '</h1>' + // Input title on this line
     '<div id="bodyContent">' + '<p>' + intro + '</p>' + '<img src=' + image + '>' + // Input summary on this line
     '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' + 'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' + '(last visited June 22, 2009).</p>' + '</div>' + '</div>';
@@ -68,9 +61,11 @@ $(function () {
     //   map: map,
     //   // title: 'Uluru (Ayers Rock)'
     // });
-    markers.addListener('click', function () {
-      infowindow.open(map, markers);
-      console.log("marker clicked");
+    console.log("markers: ", markers);
+    $(markers).each(function (i) {
+      markers[i].addListener('click', function () {
+        infowindow.open(map, markers[i]);
+      });
     });
   }
 
@@ -107,7 +102,7 @@ $(function () {
 
   function showMap() {
 
-    console.log("maps 4 u");
+    // console.log("maps 4 u");
     $mapDiv.show();
 
     var locations = [{
@@ -151,33 +146,33 @@ $(function () {
     });
 
     google.maps.event.addListener(map, 'click', function (event) {
-      console.log(map);
+      // console.log(map);
       var lat = event.latLng.lat();
       var lng = event.latLng.lng();
 
       var portal = new google.maps.LatLng(41.8903, 12.4924);
       var userClick = new google.maps.LatLng(lat, lng);
-      console.log(userClick);
+      // console.log(userClick);
 
       function calcDistance(portal, userClick) {
-        console.log('google maps:', google.maps);
-        console.log('google maps geometry:', google.maps.geometry);
+        // console.log('google maps:', google.maps);
+        // console.log('google maps geometry:', google.maps.geometry);
         return google.maps.geometry.spherical.computeDistanceBetween(portal, userClick).toFixed(0);
       }
 
       if (calcDistance(portal, userClick) < 200) {
-        console.log(calcDistance(portal, userClick));
-        console.log('Well done, you found it!');
+        // console.log(calcDistance(portal, userClick));
+        // console.log('Well done, you found it!');
         showMap();
       } else if (calcDistance(portal, userClick) < 800) {
-        console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
-        console.log('portal', portal.lat(), portal.lng());
-        console.log('click', userClick.lat(), userClick.lng());
+        // console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+        // console.log('portal', portal.lat(), portal.lng());
+        // console.log('click', userClick.lat(), userClick.lng());
       } else {
-        console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
-        console.log('portal', portal.lat(), portal.lng());
-        console.log('click', userClick.lat(), userClick.lng());
-      }
+          // console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          // console.log('portal', portal.lat(), portal.lng());
+          // console.log('click', userClick.lat(), userClick.lng());
+        }
     });
 
     $('.hud').html('<p>Period:' + periods + ',  Location:' + name + ', lat:' + myLocation.lat + 'lng:' + myLocation.lng + '</p>');
@@ -185,7 +180,7 @@ $(function () {
     counter++;
   }
 
-  console.log(map);
+  // console.log(map);
 
   function showRegisterForm() {
     if (event) event.preventDefault();
@@ -252,7 +247,8 @@ $(function () {
       showHistEvents(data);
       $(data).each(function (i) {
         createHistEventMarker(data[i]);
-        console.log(data, "event object");
+        // console.log("markers: ", markers);
+        // console.log(data, "event object");
         displayWindow(data[i]);
       });
     }).fail(showLoginForm);
@@ -308,11 +304,12 @@ $(function () {
 
   function createHistEventMarker(histEvent) {
     var latLng = { lat: histEvent.lat, lng: histEvent.lng };
-    markers = new google.maps.Marker({
+    markers.push(new google.maps.Marker({
       position: latLng,
       map: map
-    });
+    }));
     console.log("new coords", latLng);
     console.log("new marker", markers);
+    console.log("markers: ", markers);
   }
 });
