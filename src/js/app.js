@@ -28,6 +28,7 @@ $(() => {
 
 function displayWindow(data) {
   console.log(data, "displaywindow");
+
   let wikiSearch = data.histEvent; // put search item into here
 
   $.ajax({
@@ -42,13 +43,13 @@ function displayWindow(data) {
 }
 
   function updateData(data) {
-    console.log(data);
+      console.log('markers: ', markers);
     var obj = data.query.pages;
 for(var key in obj) {
     console.log('key: ' + key + '\n' + 'value: ' + obj[key]);
 }
     // console.log("wiki stuff", data.query.pages{});
-    console.log(data);
+    console.log('WikipediA: ', data);
     title = data.query.pages[key].title;
     summary = data.query.pages[key].extract;
     let image = data.query.pages[key].thumbnail.source;
@@ -171,10 +172,49 @@ function showMap() {
       draggable: true,
       map
     });
+
+
+    google.maps.event.addListener(map, 'click', function(event) {
+          console.log(map);
+      let lat = (event.latLng.lat());
+      let lng = (event.latLng.lng());
+
+
+      var portal = new google.maps.LatLng(41.8903, 12.4924);
+      var userClick = new google.maps.LatLng(lat, lng);
+        console.log(userClick);
+
+      function calcDistance(portal, userClick) {
+        console.log('google maps:', google.maps);
+        console.log('google maps geometry:', google.maps.geometry);
+      return (google.maps.geometry.spherical.computeDistanceBetween(portal, userClick)).toFixed(0);
+      }
+
+      if ((calcDistance(portal, userClick)) < 200) {
+          console.log(calcDistance(portal, userClick));
+          console.log('Well done, you found it!');
+          showMap();
+
+      } else if ((calcDistance(portal, userClick)) < 800) {
+          console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+          console.log('portal', portal.lat(), portal.lng());
+          console.log('click', userClick.lat(), userClick.lng());
+      }
+       else {
+          console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          console.log('portal', portal.lat(), portal.lng());
+          console.log('click', userClick.lat(), userClick.lng());
+      }
+
+    });
+
+
     $('.hud').html(`<p>Period:${periods},  Location:${name}, lat:${myLocation.lat}lng:${myLocation.lng}</p>`);
     // getHistEvents();
     counter++;
   }
+
+    console.log(map);
 
   function showRegisterForm() {
     if(event) event.preventDefault();
