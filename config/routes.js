@@ -1,6 +1,6 @@
 const express = require("express");
 const router  = express.Router();
-const dogsController = require("../controllers/dogs");
+const histEventsController = require("../controllers/histEvents");
 const authController = require('../controllers/auth');
 const jwt    = require("jsonwebtoken");
 
@@ -29,15 +29,15 @@ router.route("/register")
 router.route("/login")
   .post(authController.login);
 
-router.route("/dogs")
-  .post(secureRoute, dogsController.create)
-  .get(secureRoute, dogsController.index);
+router.route("/histEvents")
+  .post(secureRoute, histEventsController.create)
+  .get(secureRoute, histEventsController.index);
 
-router.route("/dogs/:id")
+router.route("/histEvents/:id")
   .all(secureRoute)
-  .get(dogsController.show)
-  .put(dogsController.update)
-  .delete(dogsController.delete);
+  .get(histEventsController.show)
+  .put(histEventsController.update)
+  .delete(histEventsController.delete);
 
 
 module.exports = router;
