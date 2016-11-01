@@ -8,7 +8,8 @@ const histEventSchema = new mongoose.Schema ({
   location:     { type: String, trim: true },
   lat:          { type: Number, trim: true },
   lng:          { type: Number, trim: true },
-  period:       { type: String, trim: true }
+  period:       { type: String, trim: true },
+  clue:         { type: String, trim: true }
 });
 
 module.exports = mongoose.model("HistEvent", histEventSchema);

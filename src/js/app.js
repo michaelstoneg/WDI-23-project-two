@@ -286,6 +286,9 @@ function showMap() {
         <div class="form-group">
           <input class="form-control" name="period" placeholder="period">
         </div>
+        <div class="form-group">
+          <input class="form-control" name="clue" placeholder="clue">
+        </div>
         <button class="btn btn-primary">Create</button>
       </form>
     `);
@@ -306,6 +309,7 @@ function showMap() {
           <input class="form-control" name="lat" value="${histEvent.lat}">
           <input class="form-control" name="lng" value="${histEvent.lng}">
           <input class="form-control" name="lng" value="${histEvent.period}">
+          <input class="form-control" name="clue" value="${histEvent.clue}">
         </div>
         <button class="btn btn-primary">Update</button>
       </form>
