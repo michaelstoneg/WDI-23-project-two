@@ -38,12 +38,12 @@ $(() => {
 
 
   function markerClick(data) {
-      console.log("all data", data, "all markers", markers);
+      // console.log("all data", data, "all markers", markers);
       let data2;
       $(markers).each(function(i) {
       markers[i].addListener('click', function() {
         let markerNumber = markers.indexOf(this);
-        console.log("this marker", this, "is number", markerNumber , "of marker array. It's corresponding event is", data[markerNumber]);
+        // console.log("this marker", this, "is number", markerNumber , "of marker array. It's corresponding event is", data[markerNumber]);
         displayWindow(data[markerNumber]);
     });
   });
@@ -66,6 +66,7 @@ function displayWindow(data) {
 }
 
   function updateData(data) {
+    console.log(data);
     let obj = data.query.pages;
     let key = Object.keys(obj);
 
@@ -73,23 +74,31 @@ function displayWindow(data) {
     summary = data.query.pages[key].extract;
     let image = 'images/sword.png';
 
-    // data.query.pages[key].thumbnail.source;
+    // let image = data.query.pages[key].thumbnail.source;
     let intro = summary.substring(0, 500);
-    var contentString = '<div id="content">'+
-                '<div id="siteNotice">'+
-                '</div>'+
-                '<h1 id="firstHeading" class="firstHeading">' + title + '</h1>'+ // Input title on this line
-                '<div id="bodyContent">'+
-                '<p>' + intro + '</p>'+ '<img src='+ image + '>' + // Input summary on this line
-                '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-                'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-                '(last visited June 22, 2009).</p>'+
-                '</div>'+
-                '</div>';
+    let url = data.query.pages[key].pageid;
+    console.log(url);
+
+    // let imghtml = '';
+    // let image = '';
+
+    var contentString = `
+                <div id="content">
+                  <div id="siteNotice"></div>
+                  <h1 id="firstHeading" class="firstHeading">${title}</h1>
+                  <div id="bodyContent">
+                    <img src=${image}>
+                    <p>${intro}<a href="https://en.wikipedia.org/wiki/?curid=${url}" target="_blank">...read more</a></p>
+                  </div>
+                </div>
+                `;
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
-            infowindow.open(map, markers[currentEvent.number]);
+    infowindow.open(map, markers[currentEvent.number]);
+    google.maps.event.addListener(infowindow,'closeclick',function(){
+      console.log("window closed");
+    });
   }
 
 
@@ -108,7 +117,7 @@ function displayWindow(data) {
   }
 
   function imIn() {
-    console.log("logged in");
+    // console.log("logged in");
     $('.popup').hide();
     $('.register').hide();
     $('.login').hide();
@@ -144,7 +153,7 @@ function showMap() {
     return;
   } else {
 
-  console.log("maps 4 u");
+  // console.log("maps 4 u");
   $mapDiv.show();
 
   const locations = [
@@ -184,16 +193,15 @@ function showMap() {
     periods = locations[counter].period;
     portals = locations[counter].portal;
 
-    console.log('all periods: ', locations);
-    console.log('current period: ', periods);
-    console.log('current portal: ', portals);
+    // console.log('all periods: ', locations);
+    // console.log('current period: ', periods);
+    // console.log('current portal: ', portals);
 
      map = new google.maps.Map($mapDiv[0], {
       center: myLocation,
       zoom: 14,
       styles: styles
     });
-
     let marker = new google.maps.Marker({
       position: myLocation,
       animation: google.maps.Animation.DROP,
@@ -210,28 +218,28 @@ function showMap() {
 
       var portal = new google.maps.LatLng(portals);
       var userClick = new google.maps.LatLng(lat, lng);
-        console.log(userClick);
+        // console.log(userClick);
 
       function calcDistance(portal, userClick) {
-        console.log('google maps:', google.maps);
-        console.log('google maps geometry:', google.maps.geometry);
+        // console.log('google maps:', google.maps);
+        // console.log('google maps geometry:', google.maps.geometry);
       return (google.maps.geometry.spherical.computeDistanceBetween(portal, userClick)).toFixed(0);
       }
 
       if ((calcDistance(portal, userClick)) < 200) {
-          console.log(calcDistance(portal, userClick));
-          console.log('Well done, you found it!');
+          // console.log(calcDistance(portal, userClick));
+          // console.log('Well done, you found it!');
           showMap();
 
       } else if ((calcDistance(portal, userClick)) < 800) {
-          console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
-          console.log('portal', portal.lat(), portal.lng());
-          console.log('click', userClick.lat(), userClick.lng());
+          // console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+          // console.log('portal', portal.lat(), portal.lng());
+          // console.log('click', userClick.lat(), userClick.lng());
       }
        else {
-          console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
-          console.log('portal', portal.lat(), portal.lng());
-          console.log('click', userClick.lat(), userClick.lng());
+          // console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          // console.log('portal', portal.lat(), portal.lng());
+          // console.log('click', userClick.lat(), userClick.lng());
       }
 
     });
@@ -359,7 +367,7 @@ function showMap() {
       }
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
-      console.log(data);
+      // console.log(data);
       if (url === '/login' || url === '/register') {
         imIn();
       }
@@ -457,9 +465,14 @@ function showMap() {
   }
 
   function createHistEventMarker(histEvent) {
+    let romeImage = {
+      url: "https://cdn1.iconfinder.com/data/icons/arms-and-armor/100/01-512.png",
+      scaledSize: new google.maps.Size(30, 30)
+    };
     let latLng = { lat:histEvent.lat, lng:histEvent.lng};
     markers.push(new google.maps.Marker({
       position: latLng,
+      icon: romeImage,
       map
     }));
   }
