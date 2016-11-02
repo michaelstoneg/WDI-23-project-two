@@ -18,6 +18,14 @@ $(function () {
   var markers = [];
   var portals = void 0;
   var currentEvent = void 0;
+  var homeLocation = null;
+
+  navigator.geolocation.getCurrentPosition(function (position) {
+    homeLocation = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+  });
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
@@ -106,11 +114,19 @@ $(function () {
   function showMap() {
 
     if (periods === 'WW2') {
-      var homeLocation = { lat: 32.026, lng: -38.878 };
-      home = new google.maps.Map($mapDiv[0], {
+      var home = new google.maps.Map($mapDiv[0], {
         center: homeLocation,
         zoom: 14
       });
+
+      map.panTo(homeLocation);
+      map.setZoom(16);
+
+      var marker = new google.maps.Marker({
+        position: homeLocation,
+        map: map
+      });
+
       $popup.show();
       $popupContent.html('<h1>You Win</h1>');
       return;
@@ -161,7 +177,7 @@ $(function () {
         styles: styles
       });
 
-      var marker = new google.maps.Marker({
+      var _marker = new google.maps.Marker({
         position: myLocation,
         animation: google.maps.Animation.DROP,
         draggable: true,

@@ -16,6 +16,14 @@ $(() => {
   let markers = [];
   let portals;
   let currentEvent;
+  let homeLocation = null;
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    homeLocation = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+  });
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
@@ -118,11 +126,19 @@ function displayWindow(data) {
 function showMap() {
 
   if (periods === 'WW2') {
-    let homeLocation = { lat: 32.026, lng: -38.878 };
-    home = new google.maps.Map($mapDiv[0], {
-     center: homeLocation,
-     zoom: 14,
-   });
+    let home = new google.maps.Map($mapDiv[0], {
+      center: homeLocation,
+      zoom: 14
+    });
+
+    map.panTo(homeLocation);
+    map.setZoom(16);
+
+    let marker = new google.maps.Marker({
+      position: homeLocation,
+      map
+    });
+
     $popup.show();
     $popupContent.html ('<h1>You Win</h1>');
     return;
