@@ -19,6 +19,7 @@ $(function () {
   var portals = void 0;
   var currentEvent = void 0;
   var homeLocation = null;
+  var icons = void 0;
 
   navigator.geolocation.getCurrentPosition(function (position) {
     homeLocation = {
@@ -150,25 +151,29 @@ $(function () {
         "center": { lat: 41.8903, lng: 12.4924 },
         "period": "Rome",
         "styles": [{ "featureType": "all", "elementType": "geometry", "stylers": [{ "color": "#787878" }] }, { "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "gamma": 0.01 }, { "lightness": 20 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "saturation": -31 }, { "lightness": -33 }, { "weight": 2 }, { "gamma": 0.8 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "lightness": 30 }, { "saturation": 30 }] }, { "featureType": "landscape.natural", "elementType": "geometry.fill", "stylers": [{ "visibility": "on" }, { "color": "#ff0000" }, { "saturation": "-50" }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "saturation": 20 }] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "lightness": 20 }, { "saturation": -20 }] }, { "featureType": "road", "elementType": "geometry", "stylers": [{ "lightness": 10 }, { "saturation": -30 }] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "saturation": 25 }, { "lightness": 25 }] }, { "featureType": "water", "elementType": "all", "stylers": [{ "lightness": -20 }] }],
-        "portal": { lat: 41.9009, lng: 12.4833 }
+        "portal": { lat: 41.9009, lng: 12.4833 },
+        "icon": { url: "https://cdn1.iconfinder.com/data/icons/arms-and-armor/100/01-512.png", scaledSize: new google.maps.Size(30, 30) }
       }, {
         "name": "London",
         "center": { lat: 51.5076, lng: -0.1278 },
         "period": "Tudor",
         "styles": [{ "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#808080" }, { "lightness": -100 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#b72025" }] }, { "featureType": "road", "elementType": "labels.text.fill", "stylers": [{ "color": "#b72025" }] }, { "featureType": "road.local", "elementType": "geometry.fill", "stylers": [{ "saturation": -100 }, { "lightness": -14 }] }, { "featureType": "water", "elementType": "geometry.fill", "stylers": [{ "color": "#b72025" }] }, { "featureType": "water", "elementType": "geometry.stroke", "stylers": [{ "saturation": -100 }, { "lightness": -100 }, { "weight": 0.2 }] }, { "featureType": "landscape.natural", "elementType": "geometry", "stylers": [{ "color": "#808080" }, { "lightness": 33 }] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#808080" }] }, { "featureType": "poi", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "poi.sports_complex", "elementType": "geometry", "stylers": [{ "saturation": -100 }, { "lightness": -100 }] }, { "featureType": "poi", "stylers": [{ "saturation": -100 }, { "lightness": -9 }] }, { "featureType": "road", "elementType": "labels.icon", "stylers": [{ "visibility": "on" }, { "saturation": -100 }] }, { "featureType": "administrative", "elementType": "labels.text", "stylers": [{ "color": "#b72025" }] }, { "featureType": "administrative", "elementType": "labels.text.stroke", "stylers": [{ "saturation": -100 }, { "lightness": -100 }, { "weight": 0.3 }] }, { "featureType": "water", "elementType": "labels.text.fill", "stylers": [{ "saturation": -100 }, { "lightness": -100 }] }, { "featureType": "transit", "elementType": "labels.icon", "stylers": [{ "saturation": -100 }] }, { "featureType": "road.local", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "road.arterial", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, {}, { "featureType": "road.local", "elementType": "labels.text", "stylers": [{ "visibility": "on" }, { "saturation": -100 }, { "lightness": 13 }] }, { "featureType": "road.highway", "elementType": "labels.icon", "stylers": [{ "invert_lightness": true }, { "lightness": -4 }, { "saturation": -90 }, { "visibility": "on" }] }, { "featureType": "road.highway", "elementType": "labels.text.stroke", "stylers": [{ "weight": 0.1 }] }, { "featureType": "landscape.natural", "elementType": "labels.text.fill", "stylers": [{ "color": "#b72025" }] }],
-        "portal": { lat: 51.508076, lng: -0.097194 }
+        "portal": { lat: 51.508076, lng: -0.097194 },
+        "icon": { url: "https://sites.create-cdn.net/siteimages/24/5/0/245079/7896020.gif?1389956032", scaledSize: new google.maps.Size(30, 30) }
       }, {
         "name": "Kingston",
         "center": { lat: 18.0179, lng: -76.8099 },
         "period": "Colonial",
         "styles": [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "color": "#675a4b" }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative", "elementType": "geometry", "stylers": [{ "color": "#ffebc5" }, { "lightness": "-10" }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#675a4b" }] }, { "featureType": "administrative.country", "elementType": "labels.text.fill", "stylers": [{ "color": "#b70046" }] }, { "featureType": "administrative.province", "elementType": "geometry.fill", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative.province", "elementType": "geometry.stroke", "stylers": [{ "color": "#675a4b" }, { "weight": "0.50" }] }, { "featureType": "administrative.province", "elementType": "labels.text.fill", "stylers": [{ "color": "#675a4b" }] }, { "featureType": "administrative.locality", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.locality", "elementType": "labels.text.fill", "stylers": [{ "color": "#ff850a" }] }, { "featureType": "administrative.neighborhood", "elementType": "geometry", "stylers": [{ "visibility": "on" }] }, { "featureType": "administrative.neighborhood", "elementType": "labels", "stylers": [{ "visibility": "off" }] }, { "featureType": "landscape", "elementType": "all", "stylers": [{ "color": "#f2f2f2" }] }, { "featureType": "landscape", "elementType": "geometry.fill", "stylers": [{ "saturation": "-71" }, { "lightness": "-2" }, { "color": "#ffebc5" }] }, { "featureType": "poi", "elementType": "all", "stylers": [{ "visibility": "off" }] }, { "featureType": "poi.park", "elementType": "geometry.fill", "stylers": [{ "color": "#70bfaf" }] }, { "featureType": "road", "elementType": "all", "stylers": [{ "saturation": -100 }, { "lightness": 45 }, { "visibility": "simplified" }] }, { "featureType": "road", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }] }, { "featureType": "road.highway", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#ffffff" }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#675a4c" }] }, { "featureType": "road.highway", "elementType": "labels.text.fill", "stylers": [{ "color": "#675a4b" }] }, { "featureType": "road.arterial", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "road.arterial", "elementType": "geometry.fill", "stylers": [{ "color": "#ffffff" }] }, { "featureType": "road.arterial", "elementType": "labels.text.fill", "stylers": [{ "color": "#675a4b" }] }, { "featureType": "road.arterial", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "road.local", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "transit", "elementType": "all", "stylers": [{ "visibility": "off" }] }, { "featureType": "water", "elementType": "all", "stylers": [{ "color": "#7ccff0" }, { "visibility": "on" }] }, { "featureType": "water", "elementType": "geometry.fill", "stylers": [{ "color": "#cfeae4" }] }, { "featureType": "water", "elementType": "labels.text.fill", "stylers": [{ "color": "#109579" }] }, { "featureType": "water", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }] }],
-        "portal": { lat: 18.0194, lng: -76.7796 }
+        "portal": { lat: 18.0194, lng: -76.7796 },
+        "icon": { url: "http://cdn.shopify.com/s/files/1/0185/5092/products/objects-0226.png?v=1369543834", scaledSize: new google.maps.Size(30, 30) }
       }, {
         "name": "Berlin",
         "center": { lat: 52.5200, lng: 13.4049 },
         "period": "WW2",
         "styles": [{ "featureType": "all", "elementType": "all", "stylers": [{ "hue": "#ffaa00" }, { "saturation": "-33" }, { "lightness": "10" }] }, { "featureType": "administrative.locality", "elementType": "labels.text.fill", "stylers": [{ "color": "#9c5e18" }] }, { "featureType": "landscape.natural.terrain", "elementType": "geometry", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "road.highway", "elementType": "geometry", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "road.highway", "elementType": "labels.text", "stylers": [{ "visibility": "on" }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "transit.line", "elementType": "all", "stylers": [{ "visibility": "off" }] }, { "featureType": "water", "elementType": "geometry.fill", "stylers": [{ "saturation": "-23" }, { "gamma": "2.01" }, { "color": "#f2f6f6" }] }, { "featureType": "water", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-14" }] }],
-        "portal": { lat: 52.5111, lng: 13.4429 }
+        "portal": { lat: 52.5111, lng: 13.4429 },
+        "icon": { url: "https://lh3.googleusercontent.com/erfTSG0iqvytXPzAD5zG5VpJtMSAc3L1I0kHqHL3N8rUNa4b6bhIHu_L3ySxIluPglQ=w300", scaledSize: new google.maps.Size(30, 30) }
       }];
 
       myLocation = locations[counter].center;
@@ -176,6 +181,7 @@ $(function () {
       var name = locations[counter].name;
       periods = locations[counter].period;
       portals = locations[counter].portal;
+      icons = locations[counter].icon;
 
       // console.log('all periods: ', locations);
       // console.log('current period: ', periods);
@@ -190,6 +196,7 @@ $(function () {
         position: myLocation,
         animation: google.maps.Animation.DROP,
         draggable: true,
+        icon: icons,
         map: map
       });
 
@@ -350,14 +357,10 @@ $(function () {
   }
 
   function createHistEventMarker(histEvent) {
-    var romeImage = {
-      url: "https://cdn1.iconfinder.com/data/icons/arms-and-armor/100/01-512.png",
-      scaledSize: new google.maps.Size(30, 30)
-    };
     var latLng = { lat: histEvent.lat, lng: histEvent.lng };
     markers.push(new google.maps.Marker({
       position: latLng,
-      icon: romeImage,
+      icon: icons,
       map: map
     }));
   }
