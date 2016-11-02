@@ -15,6 +15,7 @@ $(() => {
   let myLocation;
   let markers = [];
   let portals;
+  let currentEvent;
 
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
@@ -27,9 +28,22 @@ $(() => {
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
 
-function displayWindow(data) {
-  console.log(data, "displaywindow");
 
+  function markerClick(data) {
+      console.log("all data", data, "all markers", markers);
+      let data2;
+      $(markers).each(function(i) {
+      markers[i].addListener('click', function() {
+        let markerNumber = markers.indexOf(this);
+        console.log("this marker", this, "is number", markerNumber , "of marker array. It's corresponding event is", data[markerNumber]);
+        displayWindow(data[markerNumber]);
+    });
+  });
+  }
+
+
+function displayWindow(data) {
+  currentEvent = data;
   let wikiSearch = data.histEvent; // put search item into here
 
   $.ajax({
@@ -44,21 +58,15 @@ function displayWindow(data) {
 }
 
   function updateData(data) {
-      console.log('markers: ', markers);
-    var obj = data.query.pages;
-for(var key in obj) {
-    console.log('key: ' + key + '\n' + 'value: ' + obj[key]);
-}
-    // console.log("wiki stuff", data.query.pages{});
-    console.log('WikipediA: ', data);
+    let obj = data.query.pages;
+    let key = Object.keys(obj);
+
     title = data.query.pages[key].title;
     summary = data.query.pages[key].extract;
     let image = 'images/sword.png';
 
     // data.query.pages[key].thumbnail.source;
     let intro = summary.substring(0, 500);
-    console.log(intro, "this is intro log");
-    console.log(summary);
     var contentString = '<div id="content">'+
                 '<div id="siteNotice">'+
                 '</div>'+
@@ -73,28 +81,8 @@ for(var key in obj) {
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
-    // var marker = new google.maps.Marker({
-    //   // position: london,
-    //   map: map,
-    //   // title: 'Uluru (Ayers Rock)'
-    // });
-    $(markers).each(function (i) {
-          markers[i].addListener('click', function() {
-            infowindow.open(map, markers[i]);
-        });
-      });
-
+            infowindow.open(map, markers[currentEvent.number]);
   }
-
-  // var london = {lat: 51.509865, lng: -0.118092};
-
-
-
-
-
-
-
-
 
 
 
@@ -128,6 +116,17 @@ for(var key in obj) {
 
 
 function showMap() {
+
+  if (periods === 'WW2') {
+    let homeLocation = { lat: 32.026, lng: -38.878 };
+    home = new google.maps.Map($mapDiv[0], {
+     center: homeLocation,
+     zoom: 14,
+   });
+    $popup.show();
+    $popupContent.html ('<h1>You Win</h1>');
+    return;
+  } else {
 
   console.log("maps 4 u");
   $mapDiv.show();
@@ -169,9 +168,9 @@ function showMap() {
     periods = locations[counter].period;
     portals = locations[counter].portal;
 
-    console.log('locations: ', locations);
-    console.log('periods: ', periods);
-    console.log('portals: ', portals);
+    console.log('all periods: ', locations);
+    console.log('current period: ', periods);
+    console.log('current portal: ', portals);
 
      map = new google.maps.Map($mapDiv[0], {
       center: myLocation,
@@ -188,7 +187,7 @@ function showMap() {
 
 
     google.maps.event.addListener(map, 'click', function(event) {
-          console.log(map);
+
       let lat = (event.latLng.lat());
       let lng = (event.latLng.lng());
 
@@ -223,11 +222,12 @@ function showMap() {
 
 
     $('.hud').html(`<p>Period:${periods},  Location:${name}, lat:${myLocation.lat}lng:${myLocation.lng}</p>`);
+    markers = [];
+    currentEvent = undefined;
     getHistEvents();
     counter++;
   }
-
-    console.log(map);
+}
 
   function showRegisterForm() {
     if(event) event.preventDefault();
@@ -365,10 +365,10 @@ function showMap() {
     .done((data) => {
       showHistEvents(data);
       $(data).each(function (i) {
+        data[i].number = i;
         createHistEventMarker(data[i]);
-        // console.log(data, "event object");
-        displayWindow(data[i]);
       });
+      markerClick(data);
     })
     .fail(showLoginForm);
   }
@@ -446,8 +446,6 @@ function showMap() {
       position: latLng,
       map
     }));
-    console.log("new coords", latLng);
-    console.log("new marker", markers);
   }
 
 });
