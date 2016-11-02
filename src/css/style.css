@@ -1,12 +1,33 @@
 #map {
-  width: 90vw;
-  height: 75vh;
-  margin: 5px auto;
+  width: 100vw;
+  height: 100vh;
 }
 
-.nav {
-  z-index: 1;
+.nav-pills{
+  position: absolute;
+  top: 10px;
+  right: 20px;
   display: inline;
+  z-index: 1;
+  width: 100px;
+  background-color: white;
+}
+.nav-item {
+  width: 100%;
+}
+.hud-nav {
+  width: 100%;
+}
+.hud-nav .hudlist {
+  list-style: none;
+  padding: 0;
+  font-size: 12px;
+}
+[class*="dropdown-menu"] {
+  display: none;
+}
+.hudlist {
+  overflow: scroll;
 }
 
 .col-md-4 {
@@ -27,12 +48,4 @@
   border: 3px solid black;
   transform: translate(-50%, -50%);
   display: none;
-}
-
-.hud {
-  height: 50px;
-  width: 500px;
-  border: 3px solid black;
-  text-align: center;
-  margin: 0 auto;
 }

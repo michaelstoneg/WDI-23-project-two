@@ -39,6 +39,19 @@ $(function () {
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
 
+  $('.dropdown-toggle0').on('click', function () {
+    $('.dropdown-menu0').slideToggle();
+  });
+  $('.dropdown-toggle1').on('click', function () {
+    $('.dropdown-menu1').slideToggle();
+  });
+  $('.dropdown-toggle2').on('click', function () {
+    $('.dropdown-menu2').slideToggle();
+  });
+  $('.dropdown-toggle3').on('click', function () {
+    $('.dropdown-menu3').slideToggle();
+  });
+
   function markerClick(data) {
     // console.log("all data", data, "all markers", markers);
     var data2 = void 0;
