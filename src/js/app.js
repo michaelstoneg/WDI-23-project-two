@@ -345,7 +345,7 @@ function showMap() {
           <input class="form-control" name="location" value="${histEvent.location}">
           <input class="form-control" name="lat" value="${histEvent.lat}">
           <input class="form-control" name="lng" value="${histEvent.lng}">
-          <input class="form-control" name="lng" value="${histEvent.period}">
+          <input class="form-control" name="period" value="${histEvent.period}">
         </div>
         <button class="btn btn-primary">Update</button>
       </form>
