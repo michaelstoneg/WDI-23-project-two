@@ -37,6 +37,19 @@ $(() => {
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
 
+  $('.dropdown-toggle0').on('click', ()=> {
+  $('.dropdown-menu0').slideToggle();
+  });
+  $('.dropdown-toggle1').on('click', ()=> {
+    $('.dropdown-menu1').slideToggle();
+  });
+  $('.dropdown-toggle2').on('click', ()=> {
+    $('.dropdown-menu2').slideToggle();
+  });
+  $('.dropdown-toggle3').on('click', ()=> {
+    $('.dropdown-menu3').slideToggle();
+  });
+
 
   function markerClick(data) {
       // console.log("all data", data, "all markers", markers);
@@ -428,7 +441,6 @@ function showMap() {
     });
     $popup.show();
     $popupContent.html($row);
-
   }
 
   function deleteHistEvent() {

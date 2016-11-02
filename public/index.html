@@ -16,29 +16,65 @@
 
 
     <ul class="nav nav-pills">
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Main Menu</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item usersIndex loggedIn" href="#">Home</a>
-      <a class="dropdown-item histEventsIndex loggedIn" href="#">Events</a>
-      <a class="dropdown-item createHistEvent loggedIn" href="#">Create</a>
-      <a class="dropdown-item timeJump loggedIn" id="change-map" href="#">Warp</a>
-      <a class="dropdown-item register loggedOut" href="#">Register</a>
-      <a class="dropdown-item login loggedOut" href="#">Login</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item logout loggedIn" href="#">Logout</a>
-    </div>
-  </li>
-</ul>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle0" href="#" role="button" aria-haspopup="true" aria-expanded="false">Menu</a>
+          <div class="dropdown-menu0">
+            <a class="dropdown-item usersIndex loggedIn" href="#">Home</a>
+
+              <ul class="nav hud-nav">
+                <li class="nav-item dropdown">
+                  <a class="dropdown-item dropdown-toggle1 loggedOut" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Nav</a>
+                    <div class="dropdown-menu1">
+                      <a class="dropdown-item info loggedIn" href="#">
+                        <ul class="hudlist">
+                          <li class="period"></li>
+                          <li class="location"></li>
+                          <li class="coords"></li>
+                        </ul>
+                      </a>
+                    </div>
+                </li>
+              </ul>
+
+              <ul class="nav hud-nav">
+                <li class="nav-item dropdown">
+                  <a class="dropdown-item dropdown-toggle2 loggedOut" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Clues</a>
+                    <div class="dropdown-menu2">
+                      <a class="dropdown-item info loggedIn" href="#">
+                        <ul class="hudlist">
+                          <li class="clues">Hey I'm a roman clue!</li>
+                        </ul>
+                      </a>
+                    </div>
+                </li>
+              </ul>
+
+              <ul class="nav hud-nav">
+                <li class="nav-item dropdown">
+                  <a class="dropdown-item dropdown-toggle3 loggedOut" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Dev</a>
+                    <div class="dropdown-menu3">
+                      <a class="dropdown-item devOptions histEventsIndex loggedIn" href="#">Events</a>
+                      <a class="dropdown-item devOptions createHistEvent loggedIn" href="#">Create</a>
+                      <a class="dropdown-item devOptions timeJump loggedIn" id="change-map" href="#">Warp</a>
+                    </div>
+                </li>
+              </ul>
+            <div class="dropdown-divider"></div>
+
+            <a class="dropdown-item register loggedOut" href="#">Register</a>
+            <a class="dropdown-item login loggedOut" href="#">Login</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item logout loggedIn" href="#">Logout</a>
+          </div>
+        </li>
+      </ul>
+
 
     <div class="popup" >
       <button class="close" type="button" name="button">X</button>
       <div class="popupContent"></div>
     </div>
-    <main class="container">
-    </main>
-    <div class="hud">
-    </div>
     <div id="map"></div>
+
   </body>
 </html>
