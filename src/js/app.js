@@ -82,18 +82,18 @@ function displayWindow(data) {
     }
 
     let url = data.query.pages[key].pageid;
-    let intro = summary.substring(0, 500) + "...";
+    let intro = summary.substring(0, 500);
     // let intro = summary;
-    var contentString = '<div id="content">'+
-                '<div id="siteNotice">'+
-                '</div>'+
-                '<h1 id="firstHeading" class="firstHeading">' + title + '</h1>'+ // Input title on this line
-                '<div id="bodyContent">'+
-                '<p>' + intro + '</p>'+ imgHtml + // Input summary on this line
-                '<p><a href="https://en.wikipedia.org/wiki/?curid='+ url +'" target="_blank">Read more</a> '+
-                '</p>'+
-                '</div>'+
-                '</div>';
+    var contentString = `
+                <div id="content">
+                  <div id="siteNotice"></div>
+                  <h1 id="firstHeading" class="firstHeading">${title}</h1>
+                  <div id="bodyContent">
+                    ${imgHtml}
+                    <p>${intro}<a href="https://en.wikipedia.org/wiki/?curid=${url}" target="_blank">...read more</a></p>
+                  </div>
+                </div>
+                `;
 
     var infowindow = new google.maps.InfoWindow({
       content: contentString
