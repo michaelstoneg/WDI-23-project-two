@@ -58,7 +58,7 @@ function displayWindow(data) {
     url: "/wikipedia",
     method: "GET",
     data: {
-      prop: 'pageimages|title|extracts',
+      prop: 'pageimages|extracts',
       titles: wikiSearch
     }
   }).done(updateData)
@@ -68,19 +68,25 @@ function displayWindow(data) {
   function updateData(data) {
     let obj = data.query.pages;
     let key = Object.keys(obj);
+    let image;
+    let imgHtml = '';
 
     title = data.query.pages[key].title;
     summary = data.query.pages[key].extract;
-    let image = 'images/sword.png';
 
-    // data.query.pages[key].thumbnail.source;
-    let intro = summary.substring(0, 500);
+    if (data.query.pages[key].thumbnail) {
+      image = data.query.pages[key].thumbnail.source;
+      imgHtml = `<img src="${image}">`;
+    }
+
+    let intro = summary.substring(0, 500) + "...";
+    // let intro = summary;
     var contentString = '<div id="content">'+
                 '<div id="siteNotice">'+
                 '</div>'+
                 '<h1 id="firstHeading" class="firstHeading">' + title + '</h1>'+ // Input title on this line
                 '<div id="bodyContent">'+
-                '<p>' + intro + '</p>'+ '<img src='+ image + '>' + // Input summary on this line
+                '<p>' + intro + '</p>'+ imgHtml + // Input summary on this line
                 '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
                 'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
                 '(last visited June 22, 2009).</p>'+
