@@ -52,7 +52,9 @@ $(() => {
   $('.help').on('click', ()=> {
     $popup.show();
     $popupContent.html(`<p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>
-      <p>Each time period you visit will have a portal but they are quite well hidden! Get clues to their location by exploring the places and events marked on each map.</p>`);
+      <p>Each time period you visit will have a portal but they are quite well hidden! Get clues to their location by exploring the places and events marked on each map.</p>
+      <p>After clicking on a marker, your events and clues will be stored in their respective tabs</p>
+      `);
   });
 
   $('.dropdown-toggle0').on('click', ()=> {

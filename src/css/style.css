@@ -5,11 +5,12 @@
 
 .nav-pills {
   position: absolute;
-  top: 10px;
-  right: 20px;
+  /*top: 10px;*/
+  /*right: 10px;*/
+  /*left: 10px;*/
   display: inline;
   z-index: 4;
-  width: 125px;
+  /*width: 100%;*/
   background-color: white;
   border: 3px solid grey;
   border-radius: 5px;
@@ -50,11 +51,12 @@
   font-size: 14px;
   text-align: left;
   position: absolute;
-  top: 70px;
+  top: 20px;
   right: 20px;
   z-index: 4;
   background-color: white;
   width: 350px;
+  max-height: calc(100vh - 120px);
   padding-right: 10px;
   border: 3px solid grey;
   border-radius: 5px;
@@ -65,11 +67,12 @@
   font-size: 14px;
   text-align: left;
   position: absolute;
-  top: 70px;
-  left: 10px;
+  top: 20px;
+  right: 400px;
   z-index: 4;
   background-color: white;
   width: 350px;
+  max-height: calc(100vh - 120px);
   padding-right: 10px;
   border: 3px solid grey;
   border-radius: 5px;
@@ -80,8 +83,8 @@
   font-size: 14px;
   text-align: left;
   position: absolute;
-  top: 88%;
-  left: 75%;
+  bottom: 20px;
+  right: 20px;
   z-index: 4;
   background-color: white;
   width: 350px;
