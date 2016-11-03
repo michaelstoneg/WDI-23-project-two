@@ -32,10 +32,17 @@ $(() => {
   $change.on('click', showMap);
   $popup.on('click', 'button.delete', deleteHistEvent);
   $popup.on('click', 'button.edit', getHistEvent);
-  $('.histEventsIndex').on('click', getHistEvents);
+  $('.histEventsIndex').on('click', showHistEvents);
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
+  $popupContent.on('click', '.start', function() {
+    console.log("starting");
+   $popup.hide();
+   $('.blacktop').hide();
+   showMap();
+ });
+
 
   $('.dropdown-toggle0').on('click', ()=> {
   $('.dropdown-menu0').slideToggle();
@@ -49,6 +56,59 @@ $(() => {
   $('.dropdown-toggle3').on('click', ()=> {
     $('.dropdown-menu3').slideToggle();
   });
+
+
+    function isLoggedIn() {
+      return !!localStorage.getItem('token');
+    }
+
+    if(isLoggedIn()) {
+      imIn();
+    } else {
+      $mapDiv.hide();
+      // $('.dropdown-toggle1').hide();
+      // $('.dropdown-toggle2').hide();
+      // $('.dropdown-toggle3').hide();
+      // $('.logout').hide();
+      // $('.login').show();
+      // $('.register').show();
+      $('.loggedIn').hide();
+      $('.loggedOut').show();
+      showLoginForm();
+    }
+
+    function imIn() {
+      console.log("logged in");
+      $('.popup').hide();
+      // $('.login').hide();
+      // $('.register').hide();
+      // $('.dropdown-toggle1').show();
+      // $('.dropdown-toggle2').show();
+      // $('.dropdown-toggle3').show();
+      // $('.logout').show();
+        $('.loggedIn').show();
+        $('.loggedOut').hide();
+      $change.show();
+      preGame();
+    }
+
+    function menuHandler() {
+      $('.popup').hide();
+    }
+
+
+  function preGame () {
+    console.log("pre game");
+    // $popup.style="display: 'block'";
+    $popup.show();
+    $popupContent.show();
+    $popupContent.html(`
+      <h1>Welcome to Time Travlrz<h1>
+      <h4>How to play</h4>
+      <p>Instructions</p>
+      <button class="start">Ready?</button>
+    `);
+  }
 
 
   function markerClick(data) {
@@ -115,37 +175,11 @@ function displayWindow(data) {
     infowindow.open(map, markers[currentEvent.number]);
     google.maps.event.addListener(infowindow,'closeclick',function(){
       console.log("window closed");
+      //clues go here
+      // $('.cluelist').append(`
+      //
+      //   `);
     });
-  }
-
-
-
-  function isLoggedIn() {
-    return !!localStorage.getItem('token');
-  }
-
-  if(isLoggedIn()) {
-    imIn();
-  } else {
-    $mapDiv.hide();
-    $change.hide();
-    $('.createHistEvent').hide();
-    $('.histEventsIndex').hide();
-  }
-
-  function imIn() {
-    // console.log("logged in");
-    $('.popup').hide();
-    $('.register').hide();
-    $('.login').hide();
-    $change.show();
-    $('.createHistEvent').show();
-    $('.histEventsIndex').show();
-    showMap();
-  }
-
-  function menuHandler() {
-    $('.popup').hide();
   }
 
 
@@ -167,7 +201,10 @@ function showMap() {
 
     $popup.show();
     $popupContent.html ('<h1>You Win</h1>');
-    return;
+    // return;
+    setTimeout(() => {
+      reset();
+    }, 3000);
   } else {
 
   // console.log("maps 4 u");
@@ -267,8 +304,16 @@ function showMap() {
 
     });
 
-
-    $('.hud').html(`<p>Period:${periods},  Location:${name}, lat:${myLocation.lat}lng:${myLocation.lng}</p>`);
+    $('.hudlist').append(`
+      <p>Period:</p>
+      <p>${periods}</p>
+      <p>Location:</p>
+      <p>${name}</p>
+      <p>lat:</p>
+      <p>${myLocation.lat}</p>
+      <p>lng:</p>
+      <p>${myLocation.lng}</p>
+      `);
     markers = [];
     currentEvent = undefined;
     getHistEvents();
@@ -393,8 +438,10 @@ function showMap() {
       // console.log(data);
       if (url === '/login' || url === '/register') {
         imIn();
+      } else {
+        showHistEvents();
       }
-      $('.popup').hide();
+      // $('.popup').hide();
     }).fail(showLoginForm);
   }
 
@@ -410,7 +457,8 @@ function showMap() {
       }
     })
     .done((data) => {
-      showHistEvents(data);
+      // showHistEvents(data);
+      allEvents = data;
       $(data).each(function (i) {
         data[i].number = i;
         createHistEventMarker(data[i]);
@@ -420,9 +468,12 @@ function showMap() {
     .fail(showLoginForm);
   }
 
-  function showHistEvents(histEvents) {
+  function showHistEvents() {
+    let Events = allEvents;
+    console.log(Events);
+    console.log($('.close'));
     let $row = $('<div class="row"></div>');
-    histEvents.forEach((histEvent) => {
+    Events.forEach((histEvent) => {
       $row.append(`
         <div class="col-md-4">
           <div class="card">
@@ -440,6 +491,7 @@ function showMap() {
       `);
     });
     $popup.show();
+
     $popupContent.html($row);
   }
 
@@ -477,13 +529,20 @@ function showMap() {
     if(event) event.preventDefault();
     localStorage.removeItem('token');
     $mapDiv.hide();
-    $change.hide();
-    $('.createHistEvent').hide();
-    $('.histEventsIndex').hide();
-    $('.register').show();
-    $('.login').show();
+    // $('.dropdown-toggle1').slideToggle();
+    // $('.dropdown-toggle2').slideToggle();
+    // $('.dropdown-toggle3').slideToggle();
+    // $('.dropdown-toggle1').hide();
+    // $('.dropdown-toggle2').hide();
+    // $('.dropdown-toggle3').hide();
+    // $('.logout').hide();
+    // $('.register').show();
+    // $('.login').show();
+    $('.loggedIn').hide();
+    $('.loggedOut').show();
     counter = 0;
-    // showLoginForm();
+    $('.blacktop').show();
+    showLoginForm();
   }
 
   function createHistEventMarker(histEvent) {
@@ -493,6 +552,18 @@ function showMap() {
       icon: icons,
       map
     }));
+  }
+
+
+  function reset() { console.log('inside reset');
+    counter = 0;
+    allEvents = [];
+    markers = [];
+    currentEvent = undefined;
+    periods = undefined;
+    $('.blacktop').show();
+    $mapDiv.hide();
+    preGame();
   }
 
 });
