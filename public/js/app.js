@@ -50,20 +50,29 @@ $(function () {
     showMap();
   });
 
+  $('.help').on('click', function () {
+    $popup.show();
+    $popupContent.html('<p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>\n      <p>Each time period you visit will have a portal but they are quite well hidden! Get clues to their location by exploring the places and events marked on each map.</p>');
+  });
+
   $('.dropdown-toggle0').on('click', function () {
     $('.dropdown-menu0').slideToggle();
   });
 
-  $('.dropdown-toggle1').on('click', function () {
-    $('.dropdown-menu1').slideToggle();
-  });
-
-  $('.dropdown-toggle2').on('click', function () {
-    $('.dropdown-menu2').slideToggle();
-  });
-
   $('.dropdown-toggle3').on('click', function () {
     $('.dropdown-menu3').slideToggle();
+  });
+
+  $('.dropdown-toggleclues').on('click', function () {
+    $('.dropdown-menuclues').slideToggle();
+  });
+
+  $('.dropdown-toggleevents').on('click', function () {
+    $('.dropdown-menuevents').slideToggle();
+  });
+
+  $('.dropdown-togglelocation').on('click', function () {
+    $('.dropdown-menulocation').slideToggle();
   });
 
   function isLoggedIn() {
@@ -101,13 +110,14 @@ $(function () {
     var data2 = void 0;
     $(markers).each(function (i) {
       markers[i].addListener('click', function () {
+        if (this.infowindow) return this.infowindow.open(map, this);
         var markerNumber = markers.indexOf(this);
-        displayWindow(data[markerNumber]);
+        displayWindow(data[markerNumber], this);
       });
     });
   }
 
-  function displayWindow(data) {
+  function displayWindow(data, marker) {
     currentEvent = data;
     var wikiSearch = data.histEvent;
     $.ajax({
@@ -117,10 +127,12 @@ $(function () {
         prop: 'pageimages|extracts',
         titles: wikiSearch
       }
-    }).done(updateData).fail();
+    }).done(function (data) {
+      updateData(data, marker);
+    }).fail();
   }
 
-  function updateData(data) {
+  function updateData(data, marker) {
     var obj = data.query.pages;
     var key = Object.keys(obj);
     var image = void 0;
@@ -138,14 +150,19 @@ $(function () {
     var intro = summary.substring(0, 500);
     var contentString = '\n      <div id="content">\n        <div id="siteNotice"></div>\n        <h1 id="firstHeading" class="firstHeading">' + title + '</h1>\n        <div id="bodyContent">\n          ' + imgHtml + '\n          <p>' + intro + '<a href="https://en.wikipedia.org/wiki/?curid=' + url + '" target="_blank">...read more</a></p>\n        </div>\n      </div>\n      ';
 
-    var infowindow = new google.maps.InfoWindow({
+    marker.infowindow = new google.maps.InfoWindow({
       content: contentString
     });
 
-    infowindow.open(map, markers[currentEvent.number]);
-    google.maps.event.addListener(infowindow, 'closeclick', function () {
+    marker.infowindow.open(map, marker);
+    google.maps.event.addListener(marker.infowindow, 'closeclick', function () {
+
+      if (this.hasBeenAppended) return;
+      console.log(this.hasBeenAppended);
       $('.cluelist2').append('\n        <p>' + currentEvent.clue + '</p>\n      ');
       $('.eventlist2').append('\n        <p><strong>' + currentEvent.histEvent + ' ' + currentEvent.year + '</strong></p>\n        <p>' + currentEvent.description + '</p>\n      ');
+      this.hasBeenAppended = true;
+      console.log(this.hasBeenAppended);
     });
   }
 
@@ -264,7 +281,6 @@ $(function () {
         }
       });
 
-      $('.hudlist').html('\n        <p>Period:</p>\n        <p>' + periods + '</p>\n        <p>Location:</p>\n        <p>' + name + '</p>\n        <p>lat:</p>\n        <p>' + myLocation.lat + '</p>\n        <p>lng:</p>\n        <p>' + myLocation.lng + '</p>\n        ');
       markers = [];
       currentEvent = undefined;
       getHistEvents();

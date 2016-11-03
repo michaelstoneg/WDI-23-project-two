@@ -49,22 +49,31 @@ $(() => {
   });
 
 
+  $('.help').on('click', ()=> {
+    $popup.show();
+    $popupContent.html(`<p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>
+      <p>Each time period you visit will have a portal but they are quite well hidden! Get clues to their location by exploring the places and events marked on each map.</p>`);
+  });
+
   $('.dropdown-toggle0').on('click', ()=> {
     $('.dropdown-menu0').slideToggle();
-  });
-
-  $('.dropdown-toggle1').on('click', ()=> {
-    $('.dropdown-menu1').slideToggle();
-  });
-
-  $('.dropdown-toggle2').on('click', ()=> {
-    $('.dropdown-menu2').slideToggle();
   });
 
   $('.dropdown-toggle3').on('click', ()=> {
     $('.dropdown-menu3').slideToggle();
   });
 
+  $('.dropdown-toggleclues').on('click', ()=> {
+    $('.dropdown-menuclues').slideToggle();
+  });
+
+  $('.dropdown-toggleevents').on('click', ()=> {
+    $('.dropdown-menuevents').slideToggle();
+  });
+
+  $('.dropdown-togglelocation').on('click', ()=> {
+    $('.dropdown-menulocation').slideToggle();
+  });
 
   function isLoggedIn() {
     return !!localStorage.getItem('token');
@@ -108,13 +117,14 @@ $(() => {
     let data2;
     $(markers).each(function(i) {
       markers[i].addListener('click', function() {
+        if(this.infowindow) return this.infowindow.open(map, this);
         let markerNumber = markers.indexOf(this);
-        displayWindow(data[markerNumber]);
+        displayWindow(data[markerNumber], this);
       });
     });
   }
 
-  function displayWindow(data) {
+  function displayWindow(data, marker) {
     currentEvent = data;
     let wikiSearch = data.histEvent;
     $.ajax({
@@ -124,11 +134,13 @@ $(() => {
         prop: 'pageimages|extracts',
         titles: wikiSearch
       }
-    }).done(updateData)
+    }).done((data) => {
+      updateData(data, marker);
+    })
     .fail();
   }
 
-  function updateData(data) {
+  function updateData(data, marker) {
     let obj = data.query.pages;
     let key = Object.keys(obj);
     let image;
@@ -155,12 +167,15 @@ $(() => {
       </div>
       `;
 
-    var infowindow = new google.maps.InfoWindow({
+    marker.infowindow = new google.maps.InfoWindow({
       content: contentString
     });
 
-    infowindow.open(map, markers[currentEvent.number]);
-    google.maps.event.addListener(infowindow,'closeclick',function(){
+    marker.infowindow.open(map, marker);
+    google.maps.event.addListener(marker.infowindow,'closeclick',function(){
+
+      if(this.hasBeenAppended) return;
+      console.log(this.hasBeenAppended);
       $('.cluelist2').append(`
         <p>${currentEvent.clue}</p>
       `);
@@ -168,6 +183,8 @@ $(() => {
         <p><strong>${currentEvent.histEvent} ${currentEvent.year}</strong></p>
         <p>${currentEvent.description}</p>
       `);
+      this.hasBeenAppended = true;
+      console.log(this.hasBeenAppended);
     });
   }
 
@@ -297,16 +314,6 @@ $(() => {
 
       });
 
-      $('.hudlist').html(`
-        <p>Period:</p>
-        <p>${periods}</p>
-        <p>Location:</p>
-        <p>${name}</p>
-        <p>lat:</p>
-        <p>${myLocation.lat}</p>
-        <p>lng:</p>
-        <p>${myLocation.lng}</p>
-        `);
       markers = [];
       currentEvent = undefined;
       getHistEvents();
