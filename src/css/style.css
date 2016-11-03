@@ -11,6 +11,8 @@
   z-index: 4;
   width: 125px;
   background-color: white;
+  border: 3px solid grey;
+  border-radius: 5px;
 }
 .nav-item {
   width: 100%;
@@ -39,9 +41,13 @@
   color: #0275d8;
 }
 
+.locationtitle {
+  color: #0275d8;
+}
+
 .cluelist {
   overflow: scroll;
-  font-size: 12px;
+  font-size: 14px;
   text-align: left;
   position: absolute;
   top: 10px;
@@ -50,11 +56,13 @@
   background-color: white;
   width: 350px;
   padding-right: 10px;
+  border: 3px solid grey;
+  border-radius: 5px;
 }
 
 .eventlist {
   overflow: scroll;
-  font-size: 12px;
+  font-size: 14px;
   text-align: left;
   position: absolute;
   top: 10px;
@@ -63,11 +71,13 @@
   background-color: white;
   width: 350px;
   padding-right: 10px;
+  border: 3px solid grey;
+  border-radius: 5px;
 }
 
 .locationtracker {
   overflow: scroll;
-  font-size: 12px;
+  font-size: 14px;
   text-align: left;
   position: absolute;
   top: 10px;
@@ -76,6 +86,8 @@
   background-color: white;
   width: 350px;
   padding-right: 10px;
+  border: 3px solid grey;
+  border-radius: 5px;
 }
 
 .col-md-4 {
