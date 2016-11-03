@@ -7,9 +7,13 @@ $(function () {
   var $main = $('main');
   var $popup = $('.popup');
   var $popupContent = $('.popupContent');
+  var $popup2 = $('.popup2');
+  var $popupContent2 = $('.popupContent2');
   var $mapDiv = $('#map');
   var $change = $('#change-map');
   var counter = 0;
+
+  $popup2.hide();
 
   var periods = void 0;
   var allEvents = [];
@@ -265,12 +269,12 @@ $(function () {
           // console.log(calcDistance(portal, userClick));
           console.log('Well done, you found the portal!');
           $(".locationtracker2").html('\n            <p>Well done, you found it!');
-          $popup.show();
-          $popup.css("color", "white");
-          $popupContent.html("WOOOOOOOAAAAAAAAAH");
-          $popup.css("background-image", "url('/images/warp.gif')");
+          $popup2.show();
+          $popup2.css("color", "white");
+          $popupContent2.html("WOOOOOOOAAAAAAAAAH");
+          $popup2.css("background-image", "url('/images/warp.gif')");
           setTimeout(function () {
-            $popup.hide();
+            $popup2.hide();
           }, 1500);
           showMap();
         } else if (calcDistance(portal, userClick) < 800) {

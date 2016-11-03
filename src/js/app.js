@@ -5,9 +5,13 @@ $(() => {
   let $main = $('main');
   let $popup = $('.popup');
   let $popupContent = $('.popupContent');
+  let $popup2 = $('.popup2');
+  let $popupContent2 = $('.popupContent2');
   let $mapDiv = $('#map');
   let $change = $('#change-map');
   let counter = 0;
+
+  $popup2.hide();
 
   let periods;
   let allEvents = [];
@@ -310,12 +314,12 @@ function showMap() {
           console.log('Well done, you found the portal!');
           $(".locationtracker2").html(`
             <p>Well done, you found it!`);
-          $popup.show();
-          $popup.css("color", "white");
-          $popupContent.html("WOOOOOOOAAAAAAAAAH");
-          $popup.css("background-image", "url('/images/warp.gif')");
+          $popup2.show();
+          $popup2.css("color", "white");
+          $popupContent2.html("WOOOOOOOAAAAAAAAAH");
+          $popup2.css("background-image", "url('/images/warp.gif')");
           setTimeout(() => {
-            $popup.hide();
+            $popup2.hide();
           }, 1500);
           showMap();
 

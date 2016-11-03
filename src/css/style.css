@@ -100,7 +100,7 @@
   max-width: 280px;
 }
 
-.popup {
+.popup, .popup2 {
   top: 50%;
   left: 50%;
   height: 300px;
