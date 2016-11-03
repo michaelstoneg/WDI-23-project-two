@@ -224,7 +224,7 @@ function showMap() {
     // return;
     setTimeout(() => {
       reset();
-    }, 3000);
+    }, 5000);
   } else {
 
   // console.log("maps 4 u");
@@ -306,16 +306,22 @@ function showMap() {
 
       if ((calcDistance(portal, userClick)) < 200) {
           // console.log(calcDistance(portal, userClick));
-          // console.log('Well done, you found it!');
+          console.log('Well done, you found it!');
+          $(".locationtracker2").html(`
+            <p>Well done, you found it!`);
           showMap();
 
       } else if ((calcDistance(portal, userClick)) < 800) {
-          // console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+          console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+          $(".locationtracker2").html(`
+            <p>Getting warmer, ${calcDistance(portal, userClick)} metres away`);
           // console.log('portal', portal.lat(), portal.lng());
           // console.log('click', userClick.lat(), userClick.lng());
       }
        else {
-          // console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          $(".locationtracker2").html(`
+            <p>Pretty cold, ${calcDistance(portal, userClick)} metres away`);
           // console.log('portal', portal.lat(), portal.lng());
           // console.log('click', userClick.lat(), userClick.lng());
       }

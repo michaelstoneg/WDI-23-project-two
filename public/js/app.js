@@ -187,7 +187,7 @@ $(function () {
       // return;
       setTimeout(function () {
         reset();
-      }, 3000);
+      }, 5000);
     } else {
 
       // console.log("maps 4 u");
@@ -263,17 +263,20 @@ $(function () {
 
         if (calcDistance(portal, userClick) < 200) {
           // console.log(calcDistance(portal, userClick));
-          // console.log('Well done, you found it!');
+          console.log('Well done, you found it!');
+          $(".locationtracker2").html('\n            <p>Well done, you found it!');
           showMap();
         } else if (calcDistance(portal, userClick) < 800) {
-          // console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+          console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+          $(".locationtracker2").html('\n            <p>Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
           // console.log('portal', portal.lat(), portal.lng());
           // console.log('click', userClick.lat(), userClick.lng());
         } else {
-            // console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
-            // console.log('portal', portal.lat(), portal.lng());
-            // console.log('click', userClick.lat(), userClick.lng());
-          }
+          console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          $(".locationtracker2").html('\n            <p>Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          // console.log('portal', portal.lat(), portal.lng());
+          // console.log('click', userClick.lat(), userClick.lng());
+        }
       });
 
       $('.hudlist').html('\n      <p>Period:</p>\n      <p>' + periods + '</p>\n      <p>Location:</p>\n      <p>' + name + '</p>\n      <p>lat:</p>\n      <p>' + myLocation.lat + '</p>\n      <p>lng:</p>\n      <p>' + myLocation.lng + '</p>\n      ');
