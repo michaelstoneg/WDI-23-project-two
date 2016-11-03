@@ -38,7 +38,7 @@ $(function () {
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
-  $popupContent.on('click', '.start', function () {
+  $popupContent.on('click', '#start', function () {
     console.log("starting");
     $popup.hide();
     $('.blacktop').hide();
@@ -101,7 +101,7 @@ $(function () {
     // $popup.style="display: 'block'";
     $popup.show();
     $popupContent.show();
-    $popupContent.html('\n      <h1>Welcome to Time Travlrz<h1>\n      <h4>How to play</h4>\n      <p>Instructions</p>\n      <button class="start">Ready?</button>\n    ');
+    $popupContent.html('\n      <h1>Welcome, Time Travlr</h1>\n      <br>\n      <p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>\n      <p>Each time period you visit will have a portal but they are quite well hidden!\n      Get clues to their location by exploring the places and events marked on each map.</p>\n      <button class="btn btn-primary" id="start">Ready?</button>\n    ');
   }
 
   function markerClick(data) {
@@ -180,7 +180,7 @@ $(function () {
       });
 
       $popup.show();
-      $popupContent.html('<h1>You Win</h1>');
+      $popupContent.html('\n    <h1>Congratulations!</h1>\n    <br>\n    <p>You have successfully travelled through time and found your way back to the present day.</p>\n    <br>\n    <p>Watch out for those pesky portals!</p>');
       // return;
       setTimeout(function () {
         reset();
@@ -285,7 +285,7 @@ $(function () {
   function showLoginForm() {
     if (event) event.preventDefault();
     $popup.show();
-    $popupContent.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
+    $popupContent.html('\n      <h1>Welcome back, Time Travlr</h1>\n      <br>\n      <p>Login in to carry on travelling through time.</p>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
   }
 
   function showCreateForm() {

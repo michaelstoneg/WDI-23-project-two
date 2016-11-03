@@ -53,8 +53,13 @@
   width: 600px;
   z-index: 3;
   position: absolute;
-  border: 3px solid red;
+  border: 3px solid grey;
+  border-radius: 5px;
   transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  text-align: center;
+  color: #363636;
 }
 
 .blacktop {
@@ -63,7 +68,14 @@
   height: 100%;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 2, 0.85);
+  background-image: url("http://assets.inhabitat.com/wp-content/blogs.dir/1/files/2016/02/black-holes.jpg");
+  background-position: center;
+  /*background-color: rgba(0, 0, 2, 0.85);*/
   z-index: 2;
   display: block;
+}
+
+.btn.btn-primary {
+  background-color: #363636;
+  border-color: #363636;
 }

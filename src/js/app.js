@@ -36,7 +36,7 @@ $(() => {
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
-  $popupContent.on('click', '.start', function() {
+  $popupContent.on('click', '#start', function() {
     console.log("starting");
    $popup.hide();
    $('.blacktop').hide();
@@ -103,10 +103,12 @@ $(() => {
     $popup.show();
     $popupContent.show();
     $popupContent.html(`
-      <h1>Welcome to Time Travlrz<h1>
-      <h4>How to play</h4>
-      <p>Instructions</p>
-      <button class="start">Ready?</button>
+      <h1>Welcome, Time Travlr</h1>
+      <br>
+      <p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>
+      <p>Each time period you visit will have a portal but they are quite well hidden!
+      Get clues to their location by exploring the places and events marked on each map.</p>
+      <button class="btn btn-primary" id="start">Ready?</button>
     `);
   }
 
@@ -200,7 +202,12 @@ function showMap() {
     });
 
     $popup.show();
-    $popupContent.html ('<h1>You Win</h1>');
+    $popupContent.html (`
+    <h1>Congratulations!</h1>
+    <br>
+    <p>You have successfully travelled through time and found your way back to the present day.</p>
+    <br>
+    <p>Watch out for those pesky portals!</p>`);
     // return;
     setTimeout(() => {
       reset();
@@ -341,7 +348,9 @@ function showMap() {
     if(event) event.preventDefault();
     $popup.show();
     $popupContent.html(`
-      <h2>Login</h2>
+      <h1>Welcome back, Time Travlr</h1>
+      <br>
+      <p>Login in to carry on travelling through time.</p>
       <form method="post" action="/login">
         <div class="form-group">
           <input class="form-control" name="email" placeholder="Email">
