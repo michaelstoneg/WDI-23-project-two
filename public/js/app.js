@@ -156,14 +156,16 @@ $(function () {
     infowindow.open(map, markers[currentEvent.number]);
     google.maps.event.addListener(infowindow, 'closeclick', function () {
       console.log("window closed");
-      //clues go here
-      // $('.cluelist').append(`
-      //
-      //   `);
+      // clues go here
+      $('.cluelist2').append('\n\n        <p>' + currentEvent.clue + '</p>\n        ');
+      $('.eventlist2').append('\n\n        <p><strong>' + currentEvent.histEvent + ' ' + currentEvent.year + '</strong></p>\n        <p>' + currentEvent.description + '</p>\n\n\n\n        ');
     });
   }
 
   function showMap() {
+
+    $(".cluelist2").html("");
+    $(".eventlist2").html("");
 
     if (periods === 'WW2') {
       var home = new google.maps.Map($mapDiv[0], {
@@ -192,10 +194,10 @@ $(function () {
 
       var locations = [{
         "name": "Rome",
-        "center": { lat: 41.8903, lng: 12.4924 },
+        "center": { lat: 41.8922, lng: 12.4852 },
         "period": "Rome",
         "styles": [{ "featureType": "all", "elementType": "geometry", "stylers": [{ "color": "#787878" }] }, { "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "gamma": 0.01 }, { "lightness": 20 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "saturation": -31 }, { "lightness": -33 }, { "weight": 2 }, { "gamma": 0.8 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "lightness": 30 }, { "saturation": 30 }] }, { "featureType": "landscape.natural", "elementType": "geometry.fill", "stylers": [{ "visibility": "on" }, { "color": "#ff0000" }, { "saturation": "-50" }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "saturation": 20 }] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "lightness": 20 }, { "saturation": -20 }] }, { "featureType": "road", "elementType": "geometry", "stylers": [{ "lightness": 10 }, { "saturation": -30 }] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "saturation": 25 }, { "lightness": 25 }] }, { "featureType": "water", "elementType": "all", "stylers": [{ "lightness": -20 }] }],
-        "portal": { lat: 41.9009, lng: 12.4833 },
+        "portal": { lat: 41.895, lng: 12.474 },
         "icon": { url: "https://cdn1.iconfinder.com/data/icons/arms-and-armor/100/01-512.png", scaledSize: new google.maps.Size(30, 30) }
       }, {
         "name": "London",
@@ -213,9 +215,9 @@ $(function () {
         "icon": { url: "http://cdn.shopify.com/s/files/1/0185/5092/products/objects-0226.png?v=1369543834", scaledSize: new google.maps.Size(30, 30) }
       }, {
         "name": "Berlin",
-        "center": { lat: 52.5200, lng: 13.4049 },
+        "center": { lat: 52.5076, lng: 13.3904 },
         "period": "WW2",
-        "styles": [{ "featureType": "all", "elementType": "all", "stylers": [{ "hue": "#ffaa00" }, { "saturation": "-33" }, { "lightness": "10" }] }, { "featureType": "administrative.locality", "elementType": "labels.text.fill", "stylers": [{ "color": "#9c5e18" }] }, { "featureType": "landscape.natural.terrain", "elementType": "geometry", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "road.highway", "elementType": "geometry", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "road.highway", "elementType": "labels.text", "stylers": [{ "visibility": "on" }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "transit.line", "elementType": "all", "stylers": [{ "visibility": "off" }] }, { "featureType": "water", "elementType": "geometry.fill", "stylers": [{ "saturation": "-23" }, { "gamma": "2.01" }, { "color": "#f2f6f6" }] }, { "featureType": "water", "elementType": "geometry.stroke", "stylers": [{ "saturation": "-14" }] }],
+        "styles": [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#000000" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#000000" }, { "lightness": 16 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#000000" }, { "lightness": 20 }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 17 }, { "weight": 1.2 }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 20 }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 21 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#000000" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 16 }] }, { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 19 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#0f252e" }, { "lightness": 17 }] }],
         "portal": { lat: 52.5111, lng: 13.4429 },
         "icon": { url: "https://lh3.googleusercontent.com/erfTSG0iqvytXPzAD5zG5VpJtMSAc3L1I0kHqHL3N8rUNa4b6bhIHu_L3ySxIluPglQ=w300", scaledSize: new google.maps.Size(30, 30) }
       }];
@@ -233,7 +235,7 @@ $(function () {
 
       map = new google.maps.Map($mapDiv[0], {
         center: myLocation,
-        zoom: 14,
+        zoom: 18,
         styles: styles,
         mapTypeId: 'terrain'
       });

@@ -3,7 +3,7 @@
   height: 100vh;
 }
 
-.nav-pills{
+.nav-pills {
   position: absolute;
   top: 10px;
   right: 20px;
@@ -30,10 +30,39 @@
   overflow: scroll;
   font-size: 12px;
 }
+
+.eventtitle {
+  color: #0275d8;
+}
+
+.cluetitle {
+  color: #0275d8;
+}
+
 .cluelist {
   overflow: scroll;
   font-size: 12px;
   text-align: left;
+  position: absolute;
+  top: 10px;
+  left: 500px;
+  z-index: 4;
+  background-color: white;
+  width: 350px;
+  padding-right: 10px;
+}
+
+.eventlist {
+  overflow: scroll;
+  font-size: 12px;
+  text-align: left;
+  position: absolute;
+  top: 10px;
+  left: 120px;
+  z-index: 4;
+  background-color: white;
+  width: 350px;
+  padding-right: 10px;
 }
 
 .col-md-4 {
