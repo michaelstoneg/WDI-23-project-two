@@ -1,7 +1,8 @@
 const express = require("express");
 const router  = express.Router();
-const dogsController = require("../controllers/dogs");
+const histEventsController = require("../controllers/histEvents");
 const authController = require('../controllers/auth');
+const wikipediaController = require('../controllers/wikipedia');
 const jwt    = require("jsonwebtoken");
 
 const secret  =  require('./tokens').secret;
@@ -22,6 +23,9 @@ function secureRoute(req, res, next) {
   });
 }
 
+router.route('/wikipedia')
+  .get(wikipediaController.show);
+
 router.route("/register")
   .post(authController.register);
 
@@ -29,15 +33,15 @@ router.route("/register")
 router.route("/login")
   .post(authController.login);
 
-router.route("/dogs")
-  .post(secureRoute, dogsController.create)
-  .get(secureRoute, dogsController.index);
+router.route("/histEvents")
+  .post(secureRoute, histEventsController.create)
+  .get(secureRoute, histEventsController.index);
 
-router.route("/dogs/:id")
+router.route("/histEvents/:id")
   .all(secureRoute)
-  .get(dogsController.show)
-  .put(dogsController.update)
-  .delete(dogsController.delete);
+  .get(histEventsController.show)
+  .put(histEventsController.update)
+  .delete(histEventsController.delete);
 
 
 module.exports = router;

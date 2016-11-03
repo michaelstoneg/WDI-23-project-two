@@ -2,40 +2,112 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>DOGZ</title>
+    <title>TimeTravlr</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="https://cdn2.iconfinder.com/data/icons/appicns/513/472801-appicns_Time-Machine.png">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" charset="utf-8"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWp9hzQuOqHfzTYR9MEcj9vgHw-qbYWZg&libraries=geometry"></script>
     <script src="/js/app.js" charset="utf-8"></script>
   </head>
   <body>
-    <nav class="navbar navbar-light bg-faded">
-      <div class="container">
-        <a class="navbar-brand" href="#">DOGZ</a>
-        <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar2" aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
-          &#9776;
-        </button>
-        <div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
-          <ul class="nav navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link usersIndex loggedIn" href="#">Dogs</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link register loggedOut" href="#">Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link login loggedOut" href="#">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link logout loggedIn" href="#">Logout</a>
-            </li>
-          </ul>
+
+    <!-- <img class="warpgif" src="/images/warp.gif" alt="" type="hidden"/> -->
+
+    <div class="blacktop"></div>
+
+    <!-- <ul class="nav nav-pills cluelist">
+      <a class="nav-link dropdown-toggle0" href="#" role="button" aria-haspopup="true" aria-expanded="false">Clue</a>
+    </ul> -->
+
+    <ul class="nav nav-pills cluelist">
+      <li class="nav-item dropdown">
+        <div class="dropdown-menu0">
+          <li class="nav-item dropdown">
+            <a class="dropdown-item dropdown-toggle1 cluetitle" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#"><h5>Clues</h5></a>
+            <div class="dropdown-menu1">
+              <ul class="cluelist2"></ul>
+            </div>
+          </li>
         </div>
-      </div>
-    </nav>
-    <main class="container"></main>
+      </li>
+    </ul>
+
+    <ul class="nav nav-pills eventlist">
+      <li class="nav-item dropdown">
+        <div class="dropdown-menu0">
+          <li class="nav-item dropdown">
+            <a class="dropdown-item dropdown-toggle1 eventtitle" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#"><h5>Events</h5></a>
+            <div class="dropdown-menu1">
+              <ul class="eventlist2"></ul>
+            </div>
+          </li>
+        </div>
+      </li>
+    </ul>
+
+    <ul class="nav nav-pills locationtracker">
+      <li class="nav-item dropdown">
+        <div class="dropdown-menu0">
+          <li class="nav-item dropdown">
+            <a class="dropdown-item dropdown-toggle1 locationtitle" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#"><h5>Your location</h5></a>
+            <div class="dropdown-menu1">
+              <ul class="locationtracker2"></ul>
+            </div>
+          </li>
+        </div>
+      </li>
+    </ul>
+
+    <ul class="nav nav-pills">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle0" href="#" role="button" aria-haspopup="true" aria-expanded="false"><h5>Menu</h5></a>
+          <div class="dropdown-menu0">
+
+              <ul class="nav hud-nav loggedIn">
+                <li class="nav-item dropdown">
+                  <a class="dropdown-item dropdown-toggle1" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Nav</a>
+                    <div class="dropdown-menu1">
+                      <a class="dropdown-item info" href="#">
+                        <ul class="hudlist">
+                        </ul>
+                      </a>
+                    </div>
+                </li>
+              </ul>
+
+              <ul class="nav hud-nav loggedIn">
+                <li class="nav-item dropdown">
+                  <a class="dropdown-item dropdown-toggle3 loggedIn" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Dev</a>
+                    <div class="dropdown-menu3">
+                      <a class="dropdown-item devOptions histEventsIndex" href="#">Events</a>
+                      <a class="dropdown-item devOptions createHistEvent" href="#">Create</a>
+                      <a class="dropdown-item devOptions timeJump" id="change-map" href="#">Warp</a>
+                    </div>
+                </li>
+              </ul>
+            <div class="dropdown-divider"></div>
+
+            <a class="dropdown-item register loggedOut" href="#">Register</a>
+            <a class="dropdown-item login loggedOut" href="#">Login</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item logout loggedIn" href="#">Logout</a>
+          </div>
+        </li>
+      </ul>
+
+
+    <div class="popup" type="hidden">
+      <button class="close" type="button" name="button">X</button>
+      <div class="popupContent"></div>
+    </div>
+    <div class="popup2" >
+      <div class="popupContent2"></div>
+    </div>
+    <div id="map"></div>
+
   </body>
 </html>
