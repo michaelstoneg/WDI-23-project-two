@@ -38,7 +38,7 @@ $(function () {
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
-  $popupContent.on('click', '.start', function () {
+  $popupContent.on('click', '#start', function () {
     console.log("starting");
     $popup.hide();
     $('.blacktop').hide();
@@ -101,7 +101,7 @@ $(function () {
     // $popup.style="display: 'block'";
     $popup.show();
     $popupContent.show();
-    $popupContent.html('\n      <h1>Welcome to Time Travlrz<h1>\n      <h4>How to play</h4>\n      <p>Instructions</p>\n      <button class="start">Ready?</button>\n    ');
+    $popupContent.html('\n      <h1>Welcome, Time Travlr</h1>\n      <br>\n      <p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>\n      <p>Each time period you visit will have a portal but they are quite well hidden!\n      Get clues to their location by exploring the places and events marked on each map.</p>\n      <button class="btn btn-primary" id="start">Ready?</button>\n    ');
   }
 
   function markerClick(data) {
@@ -182,7 +182,7 @@ $(function () {
       });
 
       $popup.show();
-      $popupContent.html('<h1>You Win</h1>');
+      $popupContent.html('\n    <h1>Congratulations!</h1>\n    <br>\n    <p>You have successfully travelled through time and found your way back to the present day.</p>\n    <br>\n    <p>Watch out for those pesky portals!</p>');
       // return;
       setTimeout(function () {
         reset();
@@ -203,7 +203,7 @@ $(function () {
         "name": "London",
         "center": { lat: 51.5076, lng: -0.1278 },
         "period": "Tudor",
-        "styles": [{ "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#808080" }, { "lightness": -100 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#b72025" }] }, { "featureType": "road", "elementType": "labels.text.fill", "stylers": [{ "color": "#b72025" }] }, { "featureType": "road.local", "elementType": "geometry.fill", "stylers": [{ "saturation": -100 }, { "lightness": -14 }] }, { "featureType": "water", "elementType": "geometry.fill", "stylers": [{ "color": "#b72025" }] }, { "featureType": "water", "elementType": "geometry.stroke", "stylers": [{ "saturation": -100 }, { "lightness": -100 }, { "weight": 0.2 }] }, { "featureType": "landscape.natural", "elementType": "geometry", "stylers": [{ "color": "#808080" }, { "lightness": 33 }] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#808080" }] }, { "featureType": "poi", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "poi.sports_complex", "elementType": "geometry", "stylers": [{ "saturation": -100 }, { "lightness": -100 }] }, { "featureType": "poi", "stylers": [{ "saturation": -100 }, { "lightness": -9 }] }, { "featureType": "road", "elementType": "labels.icon", "stylers": [{ "visibility": "on" }, { "saturation": -100 }] }, { "featureType": "administrative", "elementType": "labels.text", "stylers": [{ "color": "#b72025" }] }, { "featureType": "administrative", "elementType": "labels.text.stroke", "stylers": [{ "saturation": -100 }, { "lightness": -100 }, { "weight": 0.3 }] }, { "featureType": "water", "elementType": "labels.text.fill", "stylers": [{ "saturation": -100 }, { "lightness": -100 }] }, { "featureType": "transit", "elementType": "labels.icon", "stylers": [{ "saturation": -100 }] }, { "featureType": "road.local", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "road.arterial", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, {}, { "featureType": "road.local", "elementType": "labels.text", "stylers": [{ "visibility": "on" }, { "saturation": -100 }, { "lightness": 13 }] }, { "featureType": "road.highway", "elementType": "labels.icon", "stylers": [{ "invert_lightness": true }, { "lightness": -4 }, { "saturation": -90 }, { "visibility": "on" }] }, { "featureType": "road.highway", "elementType": "labels.text.stroke", "stylers": [{ "weight": 0.1 }] }, { "featureType": "landscape.natural", "elementType": "labels.text.fill", "stylers": [{ "color": "#b72025" }] }],
+        "styles": [{ "featureType": "all", "elementType": "geometry", "stylers": [{ "color": "#eead2a" }] }, { "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "gamma": 0.01 }, { "lightness": 20 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "saturation": -31 }, { "lightness": -33 }, { "weight": 2 }, { "gamma": 0.8 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "lightness": 30 }, { "saturation": 30 }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "saturation": 20 }] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "lightness": 20 }, { "saturation": -20 }] }, { "featureType": "road", "elementType": "geometry", "stylers": [{ "lightness": 10 }, { "saturation": -30 }] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "saturation": 25 }, { "lightness": 25 }] }, { "featureType": "water", "elementType": "all", "stylers": [{ "lightness": -20 }] }],
         "portal": { lat: 51.508076, lng: -0.097194 },
         "icon": { url: "https://sites.create-cdn.net/siteimages/24/5/0/245079/7896020.gif?1389956032", scaledSize: new google.maps.Size(30, 30) }
       }, {
@@ -287,7 +287,7 @@ $(function () {
   function showLoginForm() {
     if (event) event.preventDefault();
     $popup.show();
-    $popupContent.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
+    $popupContent.html('\n      <h1>Welcome back, Time Travlr</h1>\n      <br>\n      <p>Login in to carry on travelling through time.</p>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Login</button>\n      </form>\n    ');
   }
 
   function showCreateForm() {
