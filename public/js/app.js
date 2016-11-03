@@ -234,14 +234,8 @@ $(function () {
       map = new google.maps.Map($mapDiv[0], {
         center: myLocation,
         zoom: 14,
-        styles: styles
-      });
-      var _marker = new google.maps.Marker({
-        position: myLocation,
-        animation: google.maps.Animation.DROP,
-        draggable: true,
-        icon: icons,
-        map: map
+        styles: styles,
+        mapTypeId: 'terrain'
       });
 
       google.maps.event.addListener(map, 'click', function (event) {

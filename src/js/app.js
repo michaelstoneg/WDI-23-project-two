@@ -259,16 +259,9 @@ function showMap() {
      map = new google.maps.Map($mapDiv[0], {
       center: myLocation,
       zoom: 14,
-      styles: styles
+      styles: styles,
+      mapTypeId: 'terrain'
     });
-    let marker = new google.maps.Marker({
-      position: myLocation,
-      animation: google.maps.Animation.DROP,
-      draggable: true,
-      icon: icons,
-      map
-    });
-
 
     google.maps.event.addListener(map, 'click', function(event) {
 
