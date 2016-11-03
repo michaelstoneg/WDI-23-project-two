@@ -270,7 +270,7 @@ $(function () {
           }
       });
 
-      $('.hudlist').append('\n      <p>Period:</p>\n      <p>' + periods + '</p>\n      <p>Location:</p>\n      <p>' + name + '</p>\n      <p>lat:</p>\n      <p>' + myLocation.lat + '</p>\n      <p>lng:</p>\n      <p>' + myLocation.lng + '</p>\n      ');
+      $('.hudlist').html('\n      <p>Period:</p>\n      <p>' + periods + '</p>\n      <p>Location:</p>\n      <p>' + name + '</p>\n      <p>lat:</p>\n      <p>' + myLocation.lat + '</p>\n      <p>lng:</p>\n      <p>' + myLocation.lng + '</p>\n      ');
       markers = [];
       currentEvent = undefined;
       getHistEvents();

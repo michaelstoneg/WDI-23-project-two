@@ -316,7 +316,7 @@ function showMap() {
 
     });
 
-    $('.hudlist').append(`
+    $('.hudlist').html(`
       <p>Period:</p>
       <p>${periods}</p>
       <p>Location:</p>
