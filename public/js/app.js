@@ -205,13 +205,6 @@ $(function () {
         zoom: 14,
         styles: styles
       });
-      var _marker = new google.maps.Marker({
-        position: myLocation,
-        animation: google.maps.Animation.DROP,
-        draggable: true,
-        icon: icons,
-        map: map
-      });
 
       google.maps.event.addListener(map, 'click', function (event) {
 

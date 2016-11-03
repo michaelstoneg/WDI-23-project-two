@@ -224,14 +224,6 @@ function showMap() {
       zoom: 14,
       styles: styles
     });
-    let marker = new google.maps.Marker({
-      position: myLocation,
-      animation: google.maps.Animation.DROP,
-      draggable: true,
-      icon: icons,
-      map
-    });
-
 
     google.maps.event.addListener(map, 'click', function(event) {
 
