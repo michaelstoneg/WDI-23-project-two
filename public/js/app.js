@@ -265,6 +265,13 @@ $(function () {
           // console.log(calcDistance(portal, userClick));
           console.log('Well done, you found it!');
           $(".locationtracker2").html('\n            <p>Well done, you found it!');
+          $popup.show();
+          $popup.css("color", "white");
+          $popupContent.html("WOOOOOOOAAAAAAAAAH");
+          $popup.css("background-image", "url('/images/warp.gif')");
+          setTimeout(function () {
+            $popup.hide();
+          }, 1500);
           showMap();
         } else if (calcDistance(portal, userClick) < 800) {
           console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');

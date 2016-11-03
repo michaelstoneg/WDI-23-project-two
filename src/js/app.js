@@ -224,6 +224,7 @@ function showMap() {
     // return;
     setTimeout(() => {
       reset();
+
     }, 5000);
   } else {
 
@@ -309,6 +310,13 @@ function showMap() {
           console.log('Well done, you found it!');
           $(".locationtracker2").html(`
             <p>Well done, you found it!`);
+          $popup.show();
+          $popup.css("color", "white");
+          $popupContent.html("WOOOOOOOAAAAAAAAAH");
+          $popup.css("background-image", "url('/images/warp.gif')");
+          setTimeout(() => {
+            $popup.hide();
+          }, 1500);
           showMap();
 
       } else if ((calcDistance(portal, userClick)) < 800) {
