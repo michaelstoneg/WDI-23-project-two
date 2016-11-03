@@ -307,7 +307,7 @@ function showMap() {
 
       if ((calcDistance(portal, userClick)) < 200) {
           // console.log(calcDistance(portal, userClick));
-          console.log('Well done, you found it!');
+          console.log('Well done, you found the portal!');
           $(".locationtracker2").html(`
             <p>Well done, you found it!`);
           $popup.show();

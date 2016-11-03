@@ -263,7 +263,7 @@ $(function () {
 
         if (calcDistance(portal, userClick) < 200) {
           // console.log(calcDistance(portal, userClick));
-          console.log('Well done, you found it!');
+          console.log('Well done, you found the portal!');
           $(".locationtracker2").html('\n            <p>Well done, you found it!');
           $popup.show();
           $popup.css("color", "white");
