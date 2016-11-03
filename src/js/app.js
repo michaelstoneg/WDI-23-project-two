@@ -222,7 +222,8 @@ function showMap() {
      map = new google.maps.Map($mapDiv[0], {
       center: myLocation,
       zoom: 14,
-      styles: styles
+      styles: styles,
+      mapTypeId: 'terrain'
     });
 
     google.maps.event.addListener(map, 'click', function(event) {
