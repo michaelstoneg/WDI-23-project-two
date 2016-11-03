@@ -18,6 +18,7 @@ $(() => {
   let currentEvent;
   let homeLocation = null;
   let icons;
+  let zoom;
 
   navigator.geolocation.getCurrentPosition((position) => {
     homeLocation = {
@@ -36,7 +37,7 @@ $(() => {
   $('.createHistEvent').on('click', showCreateForm);
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
-  $popupContent.on('click', '.start', function() {
+  $popupContent.on('click', '#start', function() {
     console.log("starting");
    $popup.hide();
    $('.blacktop').hide();
@@ -103,10 +104,12 @@ $(() => {
     $popup.show();
     $popupContent.show();
     $popupContent.html(`
-      <h1>Welcome to Time Travlrz<h1>
-      <h4>How to play</h4>
-      <p>Instructions</p>
-      <button class="start">Ready?</button>
+      <h1>Welcome, Time Travlr</h1>
+      <br>
+      <p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>
+      <p>Each time period you visit will have a portal but they are quite well hidden!
+      Get clues to their location by exploring the places and events marked on each map.</p>
+      <button class="btn btn-primary" id="start">Ready?</button>
     `);
   }
 
@@ -175,15 +178,27 @@ function displayWindow(data) {
     infowindow.open(map, markers[currentEvent.number]);
     google.maps.event.addListener(infowindow,'closeclick',function(){
       console.log("window closed");
-      //clues go here
-      // $('.cluelist').append(`
-      //
-      //   `);
-    });
+      // clues go here
+      $('.cluelist2').append(`
+
+        <p>${currentEvent.clue}</p>
+        `);
+      $('.eventlist2').append(`
+
+        <p><strong>${currentEvent.histEvent} ${currentEvent.year}</strong></p>
+        <p>${currentEvent.description}</p>
+
+
+
+        `);
+  });
   }
 
 
 function showMap() {
+
+  $(".cluelist2").html("");
+  $(".eventlist2").html("");
 
   if (periods === 'WW2') {
     let home = new google.maps.Map($mapDiv[0], {
@@ -200,11 +215,16 @@ function showMap() {
     });
 
     $popup.show();
-    $popupContent.html ('<h1>You Win</h1>');
+    $popupContent.html (`
+    <h1>Congratulations!</h1>
+    <br>
+    <p>You have successfully travelled through time and found your way back to the present day.</p>
+    <br>
+    <p>Watch out for those pesky portals!</p>`);
     // return;
     setTimeout(() => {
       reset();
-    }, 3000);
+    }, 5000);
   } else {
 
   // console.log("maps 4 u");
@@ -213,18 +233,20 @@ function showMap() {
   const locations = [
     {
       "name": "Rome",
-      "center": { lat: 41.8903, lng: 12.4924 },
+      "center": { lat: 41.8922, lng: 12.4852 },
       "period": "Rome",
       "styles": [{"featureType":"all","elementType":"geometry","stylers":[{"color":"#787878"}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"gamma":0.01},{"lightness":20}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"saturation":-31},{"lightness":-33},{"weight":2},{"gamma":0.8}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":30},{"saturation":30}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#ff0000"},{"saturation":"-50"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"saturation":20}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"lightness":20},{"saturation":-20}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":10},{"saturation":-30}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":25},{"lightness":25}]},{"featureType":"water","elementType":"all","stylers":[{"lightness":-20}]}],
-      "portal": { lat: 41.9009, lng: 12.4833 },
+      "portal": { lat: 41.895, lng: 12.474 },
+      "zoom": 18,
       "icon": { url: "https://cdn1.iconfinder.com/data/icons/arms-and-armor/100/01-512.png", scaledSize: new google.maps.Size(30, 30) }
     },
     {
       "name": "London",
       "center": { lat: 51.5076, lng: -0.1278 },
       "period": "Tudor",
-      "styles": [{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#808080"},{"lightness":-100}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#b72025"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#b72025"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"saturation":-100},{"lightness":-14}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#b72025"}]},{"featureType":"water","elementType":"geometry.stroke","stylers":[{"saturation":-100},{"lightness":-100},{"weight":0.2}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"color":"#808080"},{"lightness":33}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#808080"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"poi.sports_complex","elementType":"geometry","stylers":[{"saturation":-100},{"lightness":-100}]},{"featureType":"poi","stylers":[{"saturation":-100},{"lightness":-9}]},{"featureType":"road","elementType":"labels.icon","stylers":[{"visibility":"on"},{"saturation":-100}]},{"featureType":"administrative","elementType":"labels.text","stylers":[{"color":"#b72025"}]},{"featureType":"administrative","elementType":"labels.text.stroke","stylers":[{"saturation":-100},{"lightness":-100},{"weight":0.3}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"saturation":-100},{"lightness":-100}]},{"featureType":"transit","elementType":"labels.icon","stylers":[{"saturation":-100}]},{"featureType":"road.local","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{},{"featureType":"road.local","elementType":"labels.text","stylers":[{"visibility":"on"},{"saturation":-100},{"lightness":13}]},{"featureType":"road.highway","elementType":"labels.icon","stylers":[{"invert_lightness":true},{"lightness":-4},{"saturation":-90},{"visibility":"on"}]},{"featureType":"road.highway","elementType":"labels.text.stroke","stylers":[{"weight":0.1}]},{"featureType":"landscape.natural","elementType":"labels.text.fill","stylers":[{"color":"#b72025"}]}],
+      "styles": [{"featureType":"all","elementType":"geometry","stylers":[{"color":"#eead2a"}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"gamma":0.01},{"lightness":20}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"saturation":-31},{"lightness":-33},{"weight":2},{"gamma":0.8}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":30},{"saturation":30}]},{"featureType":"poi","elementType":"geometry","stylers":[{"saturation":20}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"lightness":20},{"saturation":-20}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":10},{"saturation":-30}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":25},{"lightness":25}]},{"featureType":"water","elementType":"all","stylers":[{"lightness":-20}]}],
       "portal": { lat: 51.508076, lng: -0.097194 },
+      "zoom": 12,
       "icon": { url: "https://sites.create-cdn.net/siteimages/24/5/0/245079/7896020.gif?1389956032", scaledSize: new google.maps.Size(30, 30) }
     },
     {
@@ -233,14 +255,16 @@ function showMap() {
       "period": "Colonial",
       "styles": [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry","stylers":[{"color":"#ffebc5"},{"lightness":"-10"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#675a4b"}]},{"featureType":"administrative.country","elementType":"labels.text.fill","stylers":[{"color":"#b70046"}]},{"featureType":"administrative.province","elementType":"geometry.fill","stylers":[{"visibility":"off"}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"color":"#675a4b"},{"weight":"0.50"}]},{"featureType":"administrative.province","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"administrative.locality","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"color":"#ff850a"}]},{"featureType":"administrative.neighborhood","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"administrative.neighborhood","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"saturation":"-71"},{"lightness":"-2"},{"color":"#ffebc5"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#70bfaf"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#675a4c"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#7ccff0"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#cfeae4"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#109579"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]}],
       "portal": { lat: 18.2287687, lng: -77.7615045 },
+      "zoom": 14,
       "icon": { url: "http://cdn.shopify.com/s/files/1/0185/5092/products/objects-0226.png?v=1369543834", scaledSize: new google.maps.Size(30, 30) }
     },
     {
       "name": "Berlin",
-      "center": { lat: 52.5200, lng: 13.4049 },
+      "center": { lat: 52.5076, lng: 13.3904 },
       "period": "WW2",
-      "styles": [{"featureType":"all","elementType":"all","stylers":[{"hue":"#ffaa00"},{"saturation":"-33"},{"lightness":"10"}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"color":"#9c5e18"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"transit.line","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"saturation":"-23"},{"gamma":"2.01"},{"color":"#f2f6f6"}]},{"featureType":"water","elementType":"geometry.stroke","stylers":[{"saturation":"-14"}]}],
+      "styles": [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#0f252e"},{"lightness":17}]}],
       "portal": { lat: 52.5111, lng: 13.4429 },
+      "zoom": 13,
       "icon": { url: "https://lh3.googleusercontent.com/erfTSG0iqvytXPzAD5zG5VpJtMSAc3L1I0kHqHL3N8rUNa4b6bhIHu_L3ySxIluPglQ=w300", scaledSize: new google.maps.Size(30, 30) }
     }
   ];
@@ -251,6 +275,7 @@ function showMap() {
     periods = locations[counter].period;
     portals = locations[counter].portal;
     icons = locations[counter].icon;
+    zoom = locations[counter].zoom;
 
     // console.log('all periods: ', locations);
     // console.log('current period: ', periods);
@@ -258,7 +283,7 @@ function showMap() {
 
      map = new google.maps.Map($mapDiv[0], {
       center: myLocation,
-      zoom: 14,
+      zoom: zoom,
       styles: styles,
       mapTypeId: 'terrain'
     });
@@ -281,23 +306,29 @@ function showMap() {
 
       if ((calcDistance(portal, userClick)) < 200) {
           // console.log(calcDistance(portal, userClick));
-          // console.log('Well done, you found it!');
+          console.log('Well done, you found it!');
+          $(".locationtracker2").html(`
+            <p>Well done, you found it!`);
           showMap();
 
       } else if ((calcDistance(portal, userClick)) < 800) {
-          // console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+          console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+          $(".locationtracker2").html(`
+            <p>Getting warmer, ${calcDistance(portal, userClick)} metres away`);
           // console.log('portal', portal.lat(), portal.lng());
           // console.log('click', userClick.lat(), userClick.lng());
       }
        else {
-          // console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          $(".locationtracker2").html(`
+            <p>Pretty cold, ${calcDistance(portal, userClick)} metres away`);
           // console.log('portal', portal.lat(), portal.lng());
           // console.log('click', userClick.lat(), userClick.lng());
       }
 
     });
 
-    $('.hudlist').append(`
+    $('.hudlist').html(`
       <p>Period:</p>
       <p>${periods}</p>
       <p>Location:</p>
@@ -341,7 +372,9 @@ function showMap() {
     if(event) event.preventDefault();
     $popup.show();
     $popupContent.html(`
-      <h2>Login</h2>
+      <h1>Welcome back, Time Travlr</h1>
+      <br>
+      <p>Login in to carry on travelling through time.</p>
       <form method="post" action="/login">
         <div class="form-group">
           <input class="form-control" name="email" placeholder="Email">

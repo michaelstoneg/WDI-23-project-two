@@ -3,7 +3,7 @@
   height: 100vh;
 }
 
-.nav-pills{
+.nav-pills {
   position: absolute;
   top: 10px;
   right: 20px;
@@ -30,10 +30,52 @@
   overflow: scroll;
   font-size: 12px;
 }
+
+.eventtitle {
+  color: #0275d8;
+}
+
+.cluetitle {
+  color: #0275d8;
+}
+
 .cluelist {
   overflow: scroll;
   font-size: 12px;
   text-align: left;
+  position: absolute;
+  top: 10px;
+  left: 500px;
+  z-index: 4;
+  background-color: white;
+  width: 350px;
+  padding-right: 10px;
+}
+
+.eventlist {
+  overflow: scroll;
+  font-size: 12px;
+  text-align: left;
+  position: absolute;
+  top: 10px;
+  left: 120px;
+  z-index: 4;
+  background-color: white;
+  width: 350px;
+  padding-right: 10px;
+}
+
+.locationtracker {
+  overflow: scroll;
+  font-size: 12px;
+  text-align: left;
+  position: absolute;
+  top: 10px;
+  left: 880px;
+  z-index: 4;
+  background-color: white;
+  width: 350px;
+  padding-right: 10px;
 }
 
 .col-md-4 {
@@ -53,8 +95,13 @@
   width: 600px;
   z-index: 3;
   position: absolute;
-  border: 3px solid red;
+  border: 3px solid grey;
+  border-radius: 5px;
   transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  text-align: center;
+  color: #363636;
 }
 
 .blacktop {
@@ -63,7 +110,14 @@
   height: 100%;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 2, 0.85);
+  background-image: url("http://assets.inhabitat.com/wp-content/blogs.dir/1/files/2016/02/black-holes.jpg");
+  background-position: center;
+  /*background-color: rgba(0, 0, 2, 0.85);*/
   z-index: 2;
   display: block;
+}
+
+.btn.btn-primary {
+  background-color: #363636;
+  border-color: #363636;
 }
