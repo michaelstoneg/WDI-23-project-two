@@ -2,6 +2,7 @@
 
 var summary = void 0;
 var title = void 0;
+
 $(function () {
 
   var $main = $('main');
@@ -44,7 +45,6 @@ $(function () {
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
   $popupContent.on('click', '#start', function () {
-    console.log("starting");
     $popup.hide();
     $('.blacktop').hide();
     showMap();
@@ -53,12 +53,15 @@ $(function () {
   $('.dropdown-toggle0').on('click', function () {
     $('.dropdown-menu0').slideToggle();
   });
+
   $('.dropdown-toggle1').on('click', function () {
     $('.dropdown-menu1').slideToggle();
   });
+
   $('.dropdown-toggle2').on('click', function () {
     $('.dropdown-menu2').slideToggle();
   });
+
   $('.dropdown-toggle3').on('click', function () {
     $('.dropdown-menu3').slideToggle();
   });
@@ -71,26 +74,13 @@ $(function () {
     imIn();
   } else {
     $mapDiv.hide();
-    // $('.dropdown-toggle1').hide();
-    // $('.dropdown-toggle2').hide();
-    // $('.dropdown-toggle3').hide();
-    // $('.logout').hide();
-    // $('.login').show();
-    // $('.register').show();
     $('.loggedIn').hide();
     $('.loggedOut').show();
     showLoginForm();
   }
 
   function imIn() {
-    console.log("logged in");
     $('.popup').hide();
-    // $('.login').hide();
-    // $('.register').hide();
-    // $('.dropdown-toggle1').show();
-    // $('.dropdown-toggle2').show();
-    // $('.dropdown-toggle3').show();
-    // $('.logout').show();
     $('.loggedIn').show();
     $('.loggedOut').hide();
     $change.show();
@@ -102,20 +92,16 @@ $(function () {
   }
 
   function preGame() {
-    console.log("pre game");
-    // $popup.style="display: 'block'";
     $popup.show();
     $popupContent.show();
     $popupContent.html('\n      <h1>Welcome, Time Travlr</h1>\n      <br>\n      <p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>\n      <p>Each time period you visit will have a portal but they are quite well hidden!\n      Get clues to their location by exploring the places and events marked on each map.</p>\n      <button class="btn btn-primary" id="start">Ready?</button>\n    ');
   }
 
   function markerClick(data) {
-    // console.log("all data", data, "all markers", markers);
     var data2 = void 0;
     $(markers).each(function (i) {
       markers[i].addListener('click', function () {
         var markerNumber = markers.indexOf(this);
-        // console.log("this marker", this, "is number", markerNumber , "of marker array. It's corresponding event is", data[markerNumber]);
         displayWindow(data[markerNumber]);
       });
     });
@@ -123,8 +109,7 @@ $(function () {
 
   function displayWindow(data) {
     currentEvent = data;
-    var wikiSearch = data.histEvent; // put search item into here
-
+    var wikiSearch = data.histEvent;
     $.ajax({
       url: "/wikipedia",
       method: "GET",
@@ -136,7 +121,6 @@ $(function () {
   }
 
   function updateData(data) {
-    console.log(data);
     var obj = data.query.pages;
     var key = Object.keys(obj);
     var image = void 0;
@@ -152,18 +136,16 @@ $(function () {
 
     var url = data.query.pages[key].pageid;
     var intro = summary.substring(0, 500);
-    // let intro = summary;
-    var contentString = '\n                <div id="content">\n                  <div id="siteNotice"></div>\n                  <h1 id="firstHeading" class="firstHeading">' + title + '</h1>\n                  <div id="bodyContent">\n                    ' + imgHtml + '\n                    <p>' + intro + '<a href="https://en.wikipedia.org/wiki/?curid=' + url + '" target="_blank">...read more</a></p>\n                  </div>\n                </div>\n                ';
+    var contentString = '\n      <div id="content">\n        <div id="siteNotice"></div>\n        <h1 id="firstHeading" class="firstHeading">' + title + '</h1>\n        <div id="bodyContent">\n          ' + imgHtml + '\n          <p>' + intro + '<a href="https://en.wikipedia.org/wiki/?curid=' + url + '" target="_blank">...read more</a></p>\n        </div>\n      </div>\n      ';
 
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
+
     infowindow.open(map, markers[currentEvent.number]);
     google.maps.event.addListener(infowindow, 'closeclick', function () {
-      console.log("window closed");
-      // clues go here
-      $('.cluelist2').append('\n\n        <p>' + currentEvent.clue + '</p>\n        ');
-      $('.eventlist2').append('\n\n        <p><strong>' + currentEvent.histEvent + ' ' + currentEvent.year + '</strong></p>\n        <p>' + currentEvent.description + '</p>\n\n\n\n        ');
+      $('.cluelist2').append('\n        <p>' + currentEvent.clue + '</p>\n      ');
+      $('.eventlist2').append('\n        <p><strong>' + currentEvent.histEvent + ' ' + currentEvent.year + '</strong></p>\n        <p>' + currentEvent.description + '</p>\n      ');
     });
   }
 
@@ -187,14 +169,12 @@ $(function () {
       });
 
       $popup.show();
-      $popupContent.html('\n    <h1>Congratulations!</h1>\n    <br>\n    <p>You have successfully travelled through time and found your way back to the present day.</p>\n    <br>\n    <p>Watch out for those pesky portals!</p>');
-      // return;
+      $popupContent.html('\n        <h1>Congratulations!</h1>\n        <br>\n        <p>You have successfully travelled through time and found your way back to the present day.</p>\n        <br>\n        <p>Watch out for those pesky portals!</p>');
       setTimeout(function () {
         reset();
       }, 5000);
     } else {
 
-      // console.log("maps 4 u");
       $mapDiv.show();
 
       var locations = [{
@@ -226,8 +206,8 @@ $(function () {
         "center": { lat: 52.5076, lng: 13.3904 },
         "period": "WW2",
         "styles": [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#000000" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#000000" }, { "lightness": 16 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#000000" }, { "lightness": 20 }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 17 }, { "weight": 1.2 }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 20 }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 21 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#000000" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 16 }] }, { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 19 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#0f252e" }, { "lightness": 17 }] }],
-        "portal": { lat: 52.5111, lng: 13.4429 },
-        "zoom": 13,
+        "portal": { lat: 52.5076, lng: 13.3904 },
+        "zoom": 14,
         "icon": { url: "https://lh3.googleusercontent.com/erfTSG0iqvytXPzAD5zG5VpJtMSAc3L1I0kHqHL3N8rUNa4b6bhIHu_L3ySxIluPglQ=w300", scaledSize: new google.maps.Size(30, 30) }
       }];
 
@@ -239,15 +219,12 @@ $(function () {
       icons = locations[counter].icon;
       zoom = locations[counter].zoom;
 
-      // console.log('all periods: ', locations);
-      // console.log('current period: ', periods);
-      // console.log('current portal: ', portals);
-
       map = new google.maps.Map($mapDiv[0], {
         center: myLocation,
         zoom: zoom,
         styles: styles,
-        mapTypeId: 'terrain'
+        mapTypeId: 'terrain',
+        disableDefaultUI: true
       });
 
       google.maps.event.addListener(map, 'click', function (event) {
@@ -267,8 +244,7 @@ $(function () {
 
         if (calcDistance(portal, userClick) < 200) {
           // console.log(calcDistance(portal, userClick));
-          console.log('Well done, you found the portal!');
-          $(".locationtracker2").html('\n            <p>Well done, you found it!');
+          $(".locationtracker2").html("");
           $popup2.show();
           $popup2.css("color", "white");
           $popupContent2.html("WOOOOOOOAAAAAAAAAH");
@@ -278,19 +254,17 @@ $(function () {
           }, 1500);
           showMap();
         } else if (calcDistance(portal, userClick) < 800) {
-          console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
-          $(".locationtracker2").html('\n            <p>Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
+          $(".locationtracker2").html('\n              <p>Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
           // console.log('portal', portal.lat(), portal.lng());
           // console.log('click', userClick.lat(), userClick.lng());
         } else {
-          console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
-          $(".locationtracker2").html('\n            <p>Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
+          $(".locationtracker2").html('\n              <p>Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
           // console.log('portal', portal.lat(), portal.lng());
           // console.log('click', userClick.lat(), userClick.lng());
         }
       });
 
-      $('.hudlist').html('\n      <p>Period:</p>\n      <p>' + periods + '</p>\n      <p>Location:</p>\n      <p>' + name + '</p>\n      <p>lat:</p>\n      <p>' + myLocation.lat + '</p>\n      <p>lng:</p>\n      <p>' + myLocation.lng + '</p>\n      ');
+      $('.hudlist').html('\n        <p>Period:</p>\n        <p>' + periods + '</p>\n        <p>Location:</p>\n        <p>' + name + '</p>\n        <p>lat:</p>\n        <p>' + myLocation.lat + '</p>\n        <p>lng:</p>\n        <p>' + myLocation.lng + '</p>\n        ');
       markers = [];
       currentEvent = undefined;
       getHistEvents();
@@ -340,13 +314,11 @@ $(function () {
       }
     }).done(function (data) {
       if (data.token) localStorage.setItem('token', data.token);
-      // console.log(data);
       if (url === '/login' || url === '/register') {
         imIn();
       } else {
         showHistEvents();
       }
-      // $('.popup').hide();
     }).fail(showLoginForm);
   }
 
@@ -361,7 +333,6 @@ $(function () {
         if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
       }
     }).done(function (data) {
-      // showHistEvents(data);
       allEvents = data;
       $(data).each(function (i) {
         data[i].number = i;
@@ -373,14 +344,11 @@ $(function () {
 
   function showHistEvents() {
     var Events = allEvents;
-    console.log(Events);
-    console.log($('.close'));
     var $row = $('<div class="row"></div>');
     Events.forEach(function (histEvent) {
       $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="' + histEvent.image + '" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + histEvent.histEvent + '</h4>\n              <h5 class="card-title">' + histEvent.year + '</h5>\n              <h5 class="card-title">' + histEvent.location + '</h5>\n              <p class="card-text">' + histEvent.description + '</p>\n            </div>\n          </div>\n          <button class="btn btn-danger delete" data-id="' + histEvent._id + '">Delete</button>\n          <button class="btn btn-primary edit" data-id="' + histEvent._id + '">Edit</button>\n        </div>\n      ');
     });
     $popup.show();
-
     $popupContent.html($row);
   }
 
@@ -414,15 +382,6 @@ $(function () {
     if (event) event.preventDefault();
     localStorage.removeItem('token');
     $mapDiv.hide();
-    // $('.dropdown-toggle1').slideToggle();
-    // $('.dropdown-toggle2').slideToggle();
-    // $('.dropdown-toggle3').slideToggle();
-    // $('.dropdown-toggle1').hide();
-    // $('.dropdown-toggle2').hide();
-    // $('.dropdown-toggle3').hide();
-    // $('.logout').hide();
-    // $('.register').show();
-    // $('.login').show();
     $('.loggedIn').hide();
     $('.loggedOut').show();
     counter = 0;
@@ -440,7 +399,6 @@ $(function () {
   }
 
   function reset() {
-    console.log('inside reset');
     counter = 0;
     allEvents = [];
     markers = [];

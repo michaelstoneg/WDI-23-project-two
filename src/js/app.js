@@ -1,5 +1,6 @@
 let summary;
 let title;
+
 $(() => {
 
   let $main = $('main');
@@ -42,69 +43,55 @@ $(() => {
   $('.logout').on('click', logout);
   $('.close').on('click', menuHandler);
   $popupContent.on('click', '#start', function() {
-    console.log("starting");
-   $popup.hide();
-   $('.blacktop').hide();
-   showMap();
- });
+    $popup.hide();
+    $('.blacktop').hide();
+    showMap();
+  });
 
 
   $('.dropdown-toggle0').on('click', ()=> {
-  $('.dropdown-menu0').slideToggle();
+    $('.dropdown-menu0').slideToggle();
   });
+
   $('.dropdown-toggle1').on('click', ()=> {
     $('.dropdown-menu1').slideToggle();
   });
+
   $('.dropdown-toggle2').on('click', ()=> {
     $('.dropdown-menu2').slideToggle();
   });
+
   $('.dropdown-toggle3').on('click', ()=> {
     $('.dropdown-menu3').slideToggle();
   });
 
 
-    function isLoggedIn() {
-      return !!localStorage.getItem('token');
-    }
+  function isLoggedIn() {
+    return !!localStorage.getItem('token');
+  }
 
-    if(isLoggedIn()) {
-      imIn();
-    } else {
-      $mapDiv.hide();
-      // $('.dropdown-toggle1').hide();
-      // $('.dropdown-toggle2').hide();
-      // $('.dropdown-toggle3').hide();
-      // $('.logout').hide();
-      // $('.login').show();
-      // $('.register').show();
-      $('.loggedIn').hide();
-      $('.loggedOut').show();
-      showLoginForm();
-    }
+  if(isLoggedIn()) {
+    imIn();
+  } else {
+    $mapDiv.hide();
+    $('.loggedIn').hide();
+    $('.loggedOut').show();
+    showLoginForm();
+  }
 
-    function imIn() {
-      console.log("logged in");
-      $('.popup').hide();
-      // $('.login').hide();
-      // $('.register').hide();
-      // $('.dropdown-toggle1').show();
-      // $('.dropdown-toggle2').show();
-      // $('.dropdown-toggle3').show();
-      // $('.logout').show();
-        $('.loggedIn').show();
-        $('.loggedOut').hide();
-      $change.show();
-      preGame();
-    }
+  function imIn() {
+    $('.popup').hide();
+      $('.loggedIn').show();
+      $('.loggedOut').hide();
+    $change.show();
+    preGame();
+  }
 
-    function menuHandler() {
-      $('.popup').hide();
-    }
-
+  function menuHandler() {
+    $('.popup').hide();
+  }
 
   function preGame () {
-    console.log("pre game");
-    // $popup.style="display: 'block'";
     $popup.show();
     $popupContent.show();
     $popupContent.html(`
@@ -117,37 +104,31 @@ $(() => {
     `);
   }
 
-
   function markerClick(data) {
-      // console.log("all data", data, "all markers", markers);
-      let data2;
-      $(markers).each(function(i) {
+    let data2;
+    $(markers).each(function(i) {
       markers[i].addListener('click', function() {
         let markerNumber = markers.indexOf(this);
-        // console.log("this marker", this, "is number", markerNumber , "of marker array. It's corresponding event is", data[markerNumber]);
         displayWindow(data[markerNumber]);
+      });
     });
-  });
   }
 
-
-function displayWindow(data) {
-  currentEvent = data;
-  let wikiSearch = data.histEvent; // put search item into here
-
-  $.ajax({
-    url: "/wikipedia",
-    method: "GET",
-    data: {
-      prop: 'pageimages|extracts',
-      titles: wikiSearch
-    }
-  }).done(updateData)
-  .fail();
-}
+  function displayWindow(data) {
+    currentEvent = data;
+    let wikiSearch = data.histEvent;
+    $.ajax({
+      url: "/wikipedia",
+      method: "GET",
+      data: {
+        prop: 'pageimages|extracts',
+        titles: wikiSearch
+      }
+    }).done(updateData)
+    .fail();
+  }
 
   function updateData(data) {
-    console.log(data);
     let obj = data.query.pages;
     let key = Object.keys(obj);
     let image;
@@ -156,7 +137,6 @@ function displayWindow(data) {
     title = data.query.pages[key].title;
     summary = data.query.pages[key].extract;
 
-
     if (data.query.pages[key].thumbnail) {
       image = data.query.pages[key].thumbnail.source;
       imgHtml = `<img src="${image}">`;
@@ -164,156 +144,136 @@ function displayWindow(data) {
 
     let url = data.query.pages[key].pageid;
     let intro = summary.substring(0, 500);
-    // let intro = summary;
     var contentString = `
-                <div id="content">
-                  <div id="siteNotice"></div>
-                  <h1 id="firstHeading" class="firstHeading">${title}</h1>
-                  <div id="bodyContent">
-                    ${imgHtml}
-                    <p>${intro}<a href="https://en.wikipedia.org/wiki/?curid=${url}" target="_blank">...read more</a></p>
-                  </div>
-                </div>
-                `;
+      <div id="content">
+        <div id="siteNotice"></div>
+        <h1 id="firstHeading" class="firstHeading">${title}</h1>
+        <div id="bodyContent">
+          ${imgHtml}
+          <p>${intro}<a href="https://en.wikipedia.org/wiki/?curid=${url}" target="_blank">...read more</a></p>
+        </div>
+      </div>
+      `;
 
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
+
     infowindow.open(map, markers[currentEvent.number]);
     google.maps.event.addListener(infowindow,'closeclick',function(){
-      console.log("window closed");
-      // clues go here
       $('.cluelist2').append(`
-
         <p>${currentEvent.clue}</p>
-        `);
+      `);
       $('.eventlist2').append(`
-
         <p><strong>${currentEvent.histEvent} ${currentEvent.year}</strong></p>
         <p>${currentEvent.description}</p>
-
-
-
-        `);
-  });
+      `);
+    });
   }
 
+  function showMap() {
 
-function showMap() {
+    $(".cluelist2").html("");
+    $(".eventlist2").html("");
 
-  $(".cluelist2").html("");
-  $(".eventlist2").html("");
+    if (periods === 'WW2') {
+      let home = new google.maps.Map($mapDiv[0], {
+        center: homeLocation,
+        zoom: 14
+      });
 
-  if (periods === 'WW2') {
-    let home = new google.maps.Map($mapDiv[0], {
-      center: homeLocation,
-      zoom: 14
-    });
+      map.panTo(homeLocation);
+      map.setZoom(16);
 
-    map.panTo(homeLocation);
-    map.setZoom(16);
+      let marker = new google.maps.Marker({
+        position: homeLocation,
+        map
+      });
 
-    let marker = new google.maps.Marker({
-      position: homeLocation,
-      map
-    });
+      $popup.show();
+      $popupContent.html (`
+        <h1>Congratulations!</h1>
+        <br>
+        <p>You have successfully travelled through time and found your way back to the present day.</p>
+        <br>
+        <p>Watch out for those pesky portals!</p>`);
+      setTimeout(() => {
+        reset();
+      }, 5000);
+    } else {
 
-    $popup.show();
-    $popupContent.html (`
-    <h1>Congratulations!</h1>
-    <br>
-    <p>You have successfully travelled through time and found your way back to the present day.</p>
-    <br>
-    <p>Watch out for those pesky portals!</p>`);
-    // return;
-    setTimeout(() => {
-      reset();
+      $mapDiv.show();
 
-    }, 5000);
-  } else {
+      const locations = [
+        {
+          "name": "Rome",
+          "center": { lat: 41.8922, lng: 12.4852 },
+          "period": "Rome",
+          "styles": [{"featureType":"all","elementType":"geometry","stylers":[{"color":"#787878"}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"gamma":0.01},{"lightness":20}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"saturation":-31},{"lightness":-33},{"weight":2},{"gamma":0.8}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":30},{"saturation":30}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#ff0000"},{"saturation":"-50"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"saturation":20}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"lightness":20},{"saturation":-20}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":10},{"saturation":-30}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":25},{"lightness":25}]},{"featureType":"water","elementType":"all","stylers":[{"lightness":-20}]}],
+          "portal": { lat: 41.895, lng: 12.474 },
+          "zoom": 18,
+          "icon": { url: "https://cdn1.iconfinder.com/data/icons/arms-and-armor/100/01-512.png", scaledSize: new google.maps.Size(30, 30) }
+        },{
+          "name": "London",
+          "center": { lat: 51.5076, lng: -0.1278 },
+          "period": "Tudor",
+          "styles": [{"featureType":"all","elementType":"geometry","stylers":[{"color":"#eead2a"}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"gamma":0.01},{"lightness":20}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"saturation":-31},{"lightness":-33},{"weight":2},{"gamma":0.8}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":30},{"saturation":30}]},{"featureType":"poi","elementType":"geometry","stylers":[{"saturation":20}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"lightness":20},{"saturation":-20}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":10},{"saturation":-30}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":25},{"lightness":25}]},{"featureType":"water","elementType":"all","stylers":[{"lightness":-20}]}],
+          "portal": { lat: 51.508076, lng: -0.097194 },
+          "zoom": 12,
+          "icon": { url: "https://sites.create-cdn.net/siteimages/24/5/0/245079/7896020.gif?1389956032", scaledSize: new google.maps.Size(30, 30) }
+        },{
+          "name": "Kingston",
+          "center": { lat: 18.0179, lng: -76.8099 },
+          "period": "Colonial",
+          "styles": [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry","stylers":[{"color":"#ffebc5"},{"lightness":"-10"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#675a4b"}]},{"featureType":"administrative.country","elementType":"labels.text.fill","stylers":[{"color":"#b70046"}]},{"featureType":"administrative.province","elementType":"geometry.fill","stylers":[{"visibility":"off"}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"color":"#675a4b"},{"weight":"0.50"}]},{"featureType":"administrative.province","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"administrative.locality","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"color":"#ff850a"}]},{"featureType":"administrative.neighborhood","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"administrative.neighborhood","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"saturation":"-71"},{"lightness":"-2"},{"color":"#ffebc5"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#70bfaf"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#675a4c"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#7ccff0"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#cfeae4"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#109579"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]}],
+          "portal": { lat: 18.2287687, lng: -77.7615045 },
+          "zoom": 14,
+          "icon": { url: "http://cdn.shopify.com/s/files/1/0185/5092/products/objects-0226.png?v=1369543834", scaledSize: new google.maps.Size(30, 30) }
+        },{
+          "name": "Berlin",
+          "center": { lat: 52.5076, lng: 13.3904 },
+          "period": "WW2",
+          "styles": [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#0f252e"},{"lightness":17}]}],
+          "portal": { lat: 52.5076, lng: 13.3904 },
+          "zoom": 14,
+          "icon": { url: "https://lh3.googleusercontent.com/erfTSG0iqvytXPzAD5zG5VpJtMSAc3L1I0kHqHL3N8rUNa4b6bhIHu_L3ySxIluPglQ=w300", scaledSize: new google.maps.Size(30, 30) }
+        }
+      ];
 
-  // console.log("maps 4 u");
-  $mapDiv.show();
+      myLocation = locations[counter].center;
+      let styles = locations[counter].styles;
+      let name = locations[counter].name;
+      periods = locations[counter].period;
+      portals = locations[counter].portal;
+      icons = locations[counter].icon;
+      zoom = locations[counter].zoom;
 
-  const locations = [
-    {
-      "name": "Rome",
-      "center": { lat: 41.8922, lng: 12.4852 },
-      "period": "Rome",
-      "styles": [{"featureType":"all","elementType":"geometry","stylers":[{"color":"#787878"}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"gamma":0.01},{"lightness":20}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"saturation":-31},{"lightness":-33},{"weight":2},{"gamma":0.8}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":30},{"saturation":30}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#ff0000"},{"saturation":"-50"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"saturation":20}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"lightness":20},{"saturation":-20}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":10},{"saturation":-30}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":25},{"lightness":25}]},{"featureType":"water","elementType":"all","stylers":[{"lightness":-20}]}],
-      "portal": { lat: 41.895, lng: 12.474 },
-      "zoom": 18,
-      "icon": { url: "https://cdn1.iconfinder.com/data/icons/arms-and-armor/100/01-512.png", scaledSize: new google.maps.Size(30, 30) }
-    },
-    {
-      "name": "London",
-      "center": { lat: 51.5076, lng: -0.1278 },
-      "period": "Tudor",
-      "styles": [{"featureType":"all","elementType":"geometry","stylers":[{"color":"#eead2a"}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"gamma":0.01},{"lightness":20}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"saturation":-31},{"lightness":-33},{"weight":2},{"gamma":0.8}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":30},{"saturation":30}]},{"featureType":"poi","elementType":"geometry","stylers":[{"saturation":20}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"lightness":20},{"saturation":-20}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":10},{"saturation":-30}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":25},{"lightness":25}]},{"featureType":"water","elementType":"all","stylers":[{"lightness":-20}]}],
-      "portal": { lat: 51.508076, lng: -0.097194 },
-      "zoom": 12,
-      "icon": { url: "https://sites.create-cdn.net/siteimages/24/5/0/245079/7896020.gif?1389956032", scaledSize: new google.maps.Size(30, 30) }
-    },
-    {
-      "name": "Kingston",
-      "center": { lat: 18.0179, lng: -76.8099 },
-      "period": "Colonial",
-      "styles": [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry","stylers":[{"color":"#ffebc5"},{"lightness":"-10"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#675a4b"}]},{"featureType":"administrative.country","elementType":"labels.text.fill","stylers":[{"color":"#b70046"}]},{"featureType":"administrative.province","elementType":"geometry.fill","stylers":[{"visibility":"off"}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"color":"#675a4b"},{"weight":"0.50"}]},{"featureType":"administrative.province","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"administrative.locality","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"color":"#ff850a"}]},{"featureType":"administrative.neighborhood","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"administrative.neighborhood","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"saturation":"-71"},{"lightness":"-2"},{"color":"#ffebc5"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#70bfaf"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#675a4c"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#675a4b"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#7ccff0"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#cfeae4"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#109579"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]}],
-      "portal": { lat: 18.2287687, lng: -77.7615045 },
-      "zoom": 14,
-      "icon": { url: "http://cdn.shopify.com/s/files/1/0185/5092/products/objects-0226.png?v=1369543834", scaledSize: new google.maps.Size(30, 30) }
-    },
-    {
-      "name": "Berlin",
-      "center": { lat: 52.5076, lng: 13.3904 },
-      "period": "WW2",
-      "styles": [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#0f252e"},{"lightness":17}]}],
-      "portal": { lat: 52.5111, lng: 13.4429 },
-      "zoom": 13,
-      "icon": { url: "https://lh3.googleusercontent.com/erfTSG0iqvytXPzAD5zG5VpJtMSAc3L1I0kHqHL3N8rUNa4b6bhIHu_L3ySxIluPglQ=w300", scaledSize: new google.maps.Size(30, 30) }
-    }
-  ];
+      map = new google.maps.Map($mapDiv[0], {
+        center: myLocation,
+        zoom: zoom,
+        styles: styles,
+        mapTypeId: 'terrain',
+        disableDefaultUI: true
+      });
 
-    myLocation = locations[counter].center;
-    let styles = locations[counter].styles;
-    let name = locations[counter].name;
-    periods = locations[counter].period;
-    portals = locations[counter].portal;
-    icons = locations[counter].icon;
-    zoom = locations[counter].zoom;
+      google.maps.event.addListener(map, 'click', function(event) {
 
-    // console.log('all periods: ', locations);
-    // console.log('current period: ', periods);
-    // console.log('current portal: ', portals);
+        let lat = (event.latLng.lat());
+        let lng = (event.latLng.lng());
 
-     map = new google.maps.Map($mapDiv[0], {
-      center: myLocation,
-      zoom: zoom,
-      styles: styles,
-      mapTypeId: 'terrain'
-    });
+        var portal = new google.maps.LatLng(portals);
+        var userClick = new google.maps.LatLng(lat, lng);
+          // console.log(userClick);
 
-    google.maps.event.addListener(map, 'click', function(event) {
+        function calcDistance(portal, userClick) {
+          // console.log('google maps:', google.maps);
+          // console.log('google maps geometry:', google.maps.geometry);
+          return (google.maps.geometry.spherical.computeDistanceBetween(portal, userClick)).toFixed(0);
+        }
 
-      let lat = (event.latLng.lat());
-      let lng = (event.latLng.lng());
-
-
-      var portal = new google.maps.LatLng(portals);
-      var userClick = new google.maps.LatLng(lat, lng);
-        // console.log(userClick);
-
-      function calcDistance(portal, userClick) {
-        // console.log('google maps:', google.maps);
-        // console.log('google maps geometry:', google.maps.geometry);
-      return (google.maps.geometry.spherical.computeDistanceBetween(portal, userClick)).toFixed(0);
-      }
-
-      if ((calcDistance(portal, userClick)) < 200) {
-          // console.log(calcDistance(portal, userClick));
-          console.log('Well done, you found the portal!');
-          $(".locationtracker2").html(`
-            <p>Well done, you found it!`);
+        if ((calcDistance(portal, userClick)) < 200) {
+            // console.log(calcDistance(portal, userClick));
+          $(".locationtracker2").html("");
           $popup2.show();
           $popup2.css("color", "white");
           $popupContent2.html("WOOOOOOOAAAAAAAAAH");
@@ -323,39 +283,36 @@ function showMap() {
           }, 1500);
           showMap();
 
-      } else if ((calcDistance(portal, userClick)) < 800) {
-          console.log('Getting warmer, ' + calcDistance(portal, userClick) + ' metres away');
-          $(".locationtracker2").html(`
-            <p>Getting warmer, ${calcDistance(portal, userClick)} metres away`);
-          // console.log('portal', portal.lat(), portal.lng());
-          // console.log('click', userClick.lat(), userClick.lng());
-      }
-       else {
-          console.log('Pretty cold, ' + calcDistance(portal, userClick) + ' metres away');
-          $(".locationtracker2").html(`
-            <p>Pretty cold, ${calcDistance(portal, userClick)} metres away`);
-          // console.log('portal', portal.lat(), portal.lng());
-          // console.log('click', userClick.lat(), userClick.lng());
-      }
+        } else if ((calcDistance(portal, userClick)) < 800) {
+            $(".locationtracker2").html(`
+              <p>Getting warmer, ${calcDistance(portal, userClick)} metres away`);
+            // console.log('portal', portal.lat(), portal.lng());
+            // console.log('click', userClick.lat(), userClick.lng());
+        } else {
+            $(".locationtracker2").html(`
+              <p>Pretty cold, ${calcDistance(portal, userClick)} metres away`);
+            // console.log('portal', portal.lat(), portal.lng());
+            // console.log('click', userClick.lat(), userClick.lng());
+        }
 
-    });
+      });
 
-    $('.hudlist').html(`
-      <p>Period:</p>
-      <p>${periods}</p>
-      <p>Location:</p>
-      <p>${name}</p>
-      <p>lat:</p>
-      <p>${myLocation.lat}</p>
-      <p>lng:</p>
-      <p>${myLocation.lng}</p>
-      `);
-    markers = [];
-    currentEvent = undefined;
-    getHistEvents();
-    counter++;
+      $('.hudlist').html(`
+        <p>Period:</p>
+        <p>${periods}</p>
+        <p>Location:</p>
+        <p>${name}</p>
+        <p>lat:</p>
+        <p>${myLocation.lat}</p>
+        <p>lng:</p>
+        <p>${myLocation.lng}</p>
+        `);
+      markers = [];
+      currentEvent = undefined;
+      getHistEvents();
+      counter++;
+    }
   }
-}
 
   function showRegisterForm() {
     if(event) event.preventDefault();
@@ -473,13 +430,11 @@ function showMap() {
       }
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
-      // console.log(data);
       if (url === '/login' || url === '/register') {
         imIn();
       } else {
         showHistEvents();
       }
-      // $('.popup').hide();
     }).fail(showLoginForm);
   }
 
@@ -495,7 +450,6 @@ function showMap() {
       }
     })
     .done((data) => {
-      // showHistEvents(data);
       allEvents = data;
       $(data).each(function (i) {
         data[i].number = i;
@@ -508,8 +462,6 @@ function showMap() {
 
   function showHistEvents() {
     let Events = allEvents;
-    console.log(Events);
-    console.log($('.close'));
     let $row = $('<div class="row"></div>');
     Events.forEach((histEvent) => {
       $row.append(`
@@ -529,7 +481,6 @@ function showMap() {
       `);
     });
     $popup.show();
-
     $popupContent.html($row);
   }
 
@@ -567,15 +518,6 @@ function showMap() {
     if(event) event.preventDefault();
     localStorage.removeItem('token');
     $mapDiv.hide();
-    // $('.dropdown-toggle1').slideToggle();
-    // $('.dropdown-toggle2').slideToggle();
-    // $('.dropdown-toggle3').slideToggle();
-    // $('.dropdown-toggle1').hide();
-    // $('.dropdown-toggle2').hide();
-    // $('.dropdown-toggle3').hide();
-    // $('.logout').hide();
-    // $('.register').show();
-    // $('.login').show();
     $('.loggedIn').hide();
     $('.loggedOut').show();
     counter = 0;
@@ -592,8 +534,7 @@ function showMap() {
     }));
   }
 
-
-  function reset() { console.log('inside reset');
+  function reset() {
     counter = 0;
     allEvents = [];
     markers = [];

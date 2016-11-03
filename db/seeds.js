@@ -160,25 +160,15 @@ const histEvents = [
     period: "Colonial",
     clue: "On the outskirts of what is called the 'Cockpit Country', at the border between parishes, lies a town for rebels and refugees."
   },{
-    histEvent: "Reichstag building",
-    description: "On the 30th April 1945 hundreds of soviets were gunned down in the rush to hoist the soviet flag over the government building",
-    image: "https://upload.wikimedia.org/wikipedia/en/1/14/Reichstag_flag_original.jpg",
-    year: "1945",
-    location: "The Reichstag",
-    lat: 52.5186,
-    lng: 13.3762,
-    period: "WW2",
-    clue: ""
-  },{
-    histEvent: "Olympiastadion (Berlin)",
-    description: "Hitler used the Olympic games as a form of propaganda to showoff the prowess of the Nazi regime",
+    histEvent: "Potsdamer Platz",
+    description: "Soviet forces advance through Potsdamer Platz",
     image: "",
-    year: "1936",
-    location: "Olympic Stadium",
-    lat: 52.5147,
-    lng: 13.2395,
+    year: "1945",
+    location: "Potsdamer Platz",
+    lat: 52.5096,
+    lng: 13.3759,
     period: "WW2",
-    clue: ""
+    clue: "Soviet Generals send messages saying that they have passed Potsdamer Platz and they receive orders to take the Reichstag in time for the flag to be waved on May Day Celebration, upon these orders you advance towards Moltke bridge"
   },{
     histEvent: "Moltke Bridge",
     description: "Fierce fighting took place here, as it was the final obstacle to the Reichstag, the germans attempted to demolish it but failed",
@@ -188,27 +178,27 @@ const histEvents = [
     lat: 52.5217,
     lng: 13.3691,
     period: "WW2",
-    clue: ""
+    clue: "Advance with your comrades south-east"
+  },{
+    histEvent: "Reichstag building",
+    description: "On the 30th April 1945 hundreds of soviets are gunned down in the rush to hoist the flag over the government building, symbolizing the Soviet triumph over Nazi Germany ",
+    image: "https://upload.wikimedia.org/wikipedia/en/1/14/Reichstag_flag_original.jpg",
+    year: "1945",
+    location: "The Reichstag",
+    lat: 52.5186,
+    lng: 13.3762,
+    period: "WW2",
+    clue: "Continue your attack through to the south where it is rumoured Hitler is"
   },{
     histEvent: "Führerbunker",
-    description: "Hitler conducted his orders from this bunker in the final months of the war and later shot himself here",
+    description: "Hitler conducted his orders from this bunker in the final months of the war and later shot himself and his wife, their corpses were later burnt in the chancellary in order to avoid humilation from the Soviets",
     image: "",
     year: "1945",
     location: "Führerbunker",
     lat: 52.5126,
     lng: 13.3808,
     period: "WW2",
-    clue: ""
-  },{
-    histEvent: "Memorial to the Murdered Jews of Europe",
-    description: "After the war the german government built this monument in memory of the Jews and others who suffered at the hand of the Nazis",
-    image: "",
-    year: "2004",
-    location: "Memorial to the Murdered Jews of Europe",
-    lat: 52.5139,
-    lng: 13.3787,
-    period: "WW2",
-    clue: "The place where east germans could pass to and from the west after the berlin wall has been built"
+    clue: "Finally head south towards Checkpoint Charlie, you will find it towards the south-east of the FuhrerBunker"
   }
 ];
 
