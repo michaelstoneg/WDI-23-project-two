@@ -109,6 +109,56 @@ const histEvents = [
     lng: -0.310219,
     period: "Tudor",
     clue: "Elizabeth I was a chief patron of William Shakespeare, one of the shareholders on the building you are looking for."
+  },{
+    histEvent: "Middle Passage",
+    description: "Up to 400 slaves bought and kidnapped from West Africa are carried as cargo under undescribably horrible conditions to the Americas to work, suffer and die on tobacco, sugar and coffee plantations so Europeans can enjoy the luxury goods.",
+    image: "https://en.wikipedia.org/wiki/Middle_Passage#/media/File:Slave_ship_diagram.png",
+    year: 1728,
+    location: "Somewhere in the Atlantic Ocean",
+    lat: 16.223337,
+    lng: -51.931274,
+    period: "Colonial",
+    clue: "The Caribbean island where slaves were the most rebellious and stout of heart."
+  },{
+    histEvent: "J'Ouvert",
+    description: "Refusing to suffer their souls to the same torture their bodies endured, Caribbean slaves celebrate mostly in secret. They syncretize European and African traditions into a spectacle of song and dance in which they often mocked their masters and lamented their sorry condition.",
+    image: "",
+    year: 1800,
+    location: "St. George, Grenada",
+    lat: 12.065684,
+    lng: -61.750380,
+    period: "Colonial",
+    clue: "Runaway slaves, called 'Maroons', often made settlements in remote and mountainous regions. Especially in the English and Dutch Caribbean."
+  },{
+    histEvent: "Slave breeding in the United States",
+    description: "After the Atlantic slave trade was abolished, slave owners, particularly in the US decided to satisfy their demand for labour by breeding their prperty. Slaves lost even more of the little personhood they had. It is from this that we get an even better idea of why the system was called 'chattel' slavery.",
+    image: "",
+    year: 1834,
+    location: "Jacksonville, Florida, United States of America",
+    lat: 30.439765,
+    lng: -81.437647,
+    period: "Colonial",
+    clue: "Find treasure beach on the south coast of Jamaica and head north into the mountains.."
+  },{
+    histEvent: "Hatian Revolution",
+    description: "The Haitian Revolution has often been described as the largest and most successful slave rebellion in the Western Hemisphere.  Slaves initiated the rebellion in 1791 and by 1803 they had succeeded in ending not just slavery but French control over the colony. It's main hero was non other than the great Toussaint L'Ouverture",
+    image: "",
+    year: 1803,
+    location: "Port-au-Prince, Haiti",
+    lat: 18.580524,
+    lng: -72.297292,
+    period: "Colonial",
+    clue: "Meanwhile in Jamaica..."
+  },{
+    histEvent: "Emancipation Day",
+    description: "After almost 2 centuries of what could be called a physical, psychological and cultural holocaust, through a combination of sustained resistance and global economic and political circumstances, Caribbean-Africans were finally able to make a huge step towards recovery.",
+    image: "",
+    year: 1834,
+    location: "Montego Bay, Jamaica",
+    lat: 18.473601,
+    lng: -77.922903,
+    period: "Colonial",
+    clue: "On the outskirts of what is called the 'Cockpit Country', at the border between parishes, lies a town for rebels and refugees."
   }
 ];
 
