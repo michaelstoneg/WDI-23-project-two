@@ -14,48 +14,46 @@
   </head>
   <body>
 
+    <div class="blacktop"></div>
 
     <ul class="nav nav-pills">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle0" href="#" role="button" aria-haspopup="true" aria-expanded="false">Menu</a>
           <div class="dropdown-menu0">
-            <a class="dropdown-item usersIndex loggedIn" href="#">Home</a>
+            <!-- <a class="dropdown-item usersIndex loggedIn" href="#">Home</a> -->
 
-              <ul class="nav hud-nav">
+              <ul class="nav hud-nav loggedIn">
                 <li class="nav-item dropdown">
-                  <a class="dropdown-item dropdown-toggle1 loggedOut" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Nav</a>
+                  <a class="dropdown-item dropdown-toggle1" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Nav</a>
                     <div class="dropdown-menu1">
-                      <a class="dropdown-item info loggedIn" href="#">
+                      <a class="dropdown-item info" href="#">
                         <ul class="hudlist">
-                          <li class="period"></li>
-                          <li class="location"></li>
-                          <li class="coords"></li>
                         </ul>
                       </a>
                     </div>
                 </li>
               </ul>
 
-              <ul class="nav hud-nav">
+              <ul class="nav hud-nav loggedIn">
                 <li class="nav-item dropdown">
-                  <a class="dropdown-item dropdown-toggle2 loggedOut" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Clues</a>
+                  <a class="dropdown-item dropdown-toggle2" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Clues</a>
                     <div class="dropdown-menu2">
-                      <a class="dropdown-item info loggedIn" href="#">
-                        <ul class="hudlist">
-                          <li class="clues">Hey I'm a roman clue!</li>
+                      <a class="dropdown-item info" href="#">
+                        <ul class="cluelist">
+                          <p>Hey I'm a roman clue!</p>
                         </ul>
                       </a>
                     </div>
                 </li>
               </ul>
 
-              <ul class="nav hud-nav">
+              <ul class="nav hud-nav loggedIn">
                 <li class="nav-item dropdown">
-                  <a class="dropdown-item dropdown-toggle3 loggedOut" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Dev</a>
+                  <a class="dropdown-item dropdown-toggle3 loggedIn" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="#">Dev</a>
                     <div class="dropdown-menu3">
-                      <a class="dropdown-item devOptions histEventsIndex loggedIn" href="#">Events</a>
-                      <a class="dropdown-item devOptions createHistEvent loggedIn" href="#">Create</a>
-                      <a class="dropdown-item devOptions timeJump loggedIn" id="change-map" href="#">Warp</a>
+                      <a class="dropdown-item devOptions histEventsIndex" href="#">Events</a>
+                      <a class="dropdown-item devOptions createHistEvent" href="#">Create</a>
+                      <a class="dropdown-item devOptions timeJump" id="change-map" href="#">Warp</a>
                     </div>
                 </li>
               </ul>
