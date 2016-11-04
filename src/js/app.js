@@ -209,6 +209,8 @@ $(() => {
         map
       });
 
+      $(".locationtitle").html("");
+
       $popup.show();
       $popupContent.html (`
         <h1>Congratulations!</h1>
@@ -259,6 +261,7 @@ $(() => {
         }
       ];
 
+
       myLocation = locations[counter].center;
       let styles = locations[counter].styles;
       let name = locations[counter].name;
@@ -266,6 +269,8 @@ $(() => {
       portals = locations[counter].portal;
       icons = locations[counter].icon;
       zoom = locations[counter].zoom;
+
+      $(".locationtitle").html(`Your location: ${periods}, ${name}`);
 
       map = new google.maps.Map($mapDiv[0], {
         center: myLocation,

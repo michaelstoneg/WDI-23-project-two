@@ -185,6 +185,8 @@ $(function () {
         map: map
       });
 
+      $(".locationtitle").html("");
+
       $popup.show();
       $popupContent.html('\n        <h1>Congratulations!</h1>\n        <br>\n        <p>You have successfully travelled through time and found your way back to the present day.</p>\n        <br>\n        <p>Watch out for those pesky portals!</p>');
       setTimeout(function () {
@@ -235,6 +237,8 @@ $(function () {
       portals = locations[counter].portal;
       icons = locations[counter].icon;
       zoom = locations[counter].zoom;
+
+      $(".locationtitle").html('Your location: ' + periods + ', ' + name);
 
       map = new google.maps.Map($mapDiv[0], {
         center: myLocation,
