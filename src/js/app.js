@@ -3,16 +3,15 @@ let title;
 
 $(() => {
 
+  // Global variables
   let $main = $('main');
   let $popup = $('.popup');
   let $popupContent = $('.popupContent');
-  let $popup2 = $('.popup2');
-  let $popupContent2 = $('.popupContent2');
+  let $popupWarp = $('.popupWarp');
+  let $popupContentWarp = $('.popupContentWarp');
   let $mapDiv = $('#map');
   let $change = $('#change-map');
   let counter = 0;
-
-  $popup2.hide();
 
   let periods;
   let allEvents = [];
@@ -25,6 +24,8 @@ $(() => {
   let icons;
   let zoom;
 
+  $popupWarp.hide();
+
   navigator.geolocation.getCurrentPosition((position) => {
     homeLocation = {
       lat: position.coords.latitude,
@@ -32,6 +33,7 @@ $(() => {
     };
   });
 
+  // click event handlers
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
   $popupContent.on('submit', 'form', handleForm);
@@ -46,15 +48,6 @@ $(() => {
     $popup.hide();
     $('.blacktop').hide();
     showMap();
-  });
-
-
-  $('.help').on('click', ()=> {
-    $popup.show();
-    $popupContent.html(`<p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>
-      <p>Each time period you visit will have a portal but they are quite well hidden! Get clues to their location by exploring the places and events marked on each map.</p>
-      <p>After clicking on a marker, your events and clues will be stored in their respective tabs</p>
-      `);
   });
 
   $('.dropdown-toggle0').on('click', ()=> {
@@ -77,6 +70,7 @@ $(() => {
     $('.dropdown-menulocation').slideToggle();
   });
 
+  // login functions
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }
@@ -98,10 +92,22 @@ $(() => {
     preGame();
   }
 
+  function logout() {
+    if(event) event.preventDefault();
+    localStorage.removeItem('token');
+    $mapDiv.hide();
+    $('.loggedIn').hide();
+    $('.loggedOut').show();
+    counter = 0;
+    $('.blacktop').show();
+    showLoginForm();
+  }
+
   function menuHandler() {
     $('.popup').hide();
   }
 
+  // runs pre-game popup
   function preGame () {
     $popup.show();
     $popupContent.show();
@@ -115,6 +121,16 @@ $(() => {
     `);
   }
 
+  //runs help popup
+  $('.help').on('click', ()=> {
+    $popup.show();
+    $popupContent.html(`<p>Uh oh, you have fallen through a time portal, how will you find your way back to the present day?</p>
+      <p>Each time period you visit will have a portal but they are quite well hidden! Get clues to their location by exploring the places and events marked on each map.</p>
+      <p>After clicking on a marker, your events and clues will be stored in their respective tabs</p>
+      `);
+  });
+
+  // adds click event to markers
   function markerClick(data) {
     let data2;
     $(markers).each(function(i) {
@@ -126,6 +142,7 @@ $(() => {
     });
   }
 
+  // opens infowindow, links in wikipedia api
   function displayWindow(data, marker) {
     currentEvent = data;
     let wikiSearch = data.histEvent;
@@ -142,6 +159,7 @@ $(() => {
     .fail();
   }
 
+  // populates infowindow with data from wikipedia api
   function updateData(data, marker) {
     let obj = data.query.pages;
     let key = Object.keys(obj);
@@ -151,11 +169,13 @@ $(() => {
     title = data.query.pages[key].title;
     summary = data.query.pages[key].extract;
 
+    // if wikipedia article has no image, this if statement stops it trying to find one
     if (data.query.pages[key].thumbnail) {
       image = data.query.pages[key].thumbnail.source;
       imgHtml = `<img src="${image}">`;
     }
 
+    // adds the title, image and first 500 characters of wikipedia article to infowindow. provides link to wikipedia page
     let url = data.query.pages[key].pageid;
     let intro = summary.substring(0, 500);
     var contentString = `
@@ -169,19 +189,21 @@ $(() => {
       </div>
       `;
 
+    // places info from contentString variable into the infowindow
     marker.infowindow = new google.maps.InfoWindow({
       content: contentString
     });
 
+    // when infowindow closed, adds relevant event data to events and clues list. stops duplicating info
     marker.infowindow.open(map, marker);
     google.maps.event.addListener(marker.infowindow,'closeclick',function(){
 
       if(this.hasBeenAppended) return;
       console.log(this.hasBeenAppended);
-      $('.cluelist2').append(`
+      $('.cluelistcontent').append(`
         <p>${currentEvent.clue}</p>
       `);
-      $('.eventlist2').append(`
+      $('.eventlistcontent').append(`
         <p><strong>${currentEvent.histEvent} ${currentEvent.year}</strong></p>
         <p>${currentEvent.description}</p>
       `);
@@ -192,9 +214,11 @@ $(() => {
 
   function showMap() {
 
-    $(".cluelist2").html("");
-    $(".eventlist2").html("");
+    //clears events/clues list when new map loads
+    $(".cluelistcontent").html("");
+    $(".eventlistcontent").html("");
 
+    // if in last time period, warp to user's current location and reset the game
     if (periods === 'WW2') {
       let home = new google.maps.Map($mapDiv[0], {
         center: homeLocation,
@@ -209,6 +233,10 @@ $(() => {
         map
       });
 
+      //clears the location period when game is finished
+      $(".locationtitle").html("");
+
+      // popup to show that game is finished
       $popup.show();
       $popupContent.html (`
         <h1>Congratulations!</h1>
@@ -219,16 +247,22 @@ $(() => {
       setTimeout(() => {
         reset();
       }, 5000);
+
+    // runs if not last time period
     } else {
 
+      // shows different maps
       $mapDiv.show();
 
+      // array of snazzy maps
       const locations = [
         {
-          "name": "Rome",
+          "name": "Roman Empire",
           "center": { lat: 41.8922, lng: 12.4852 },
           "period": "Rome",
+          // style from snazzymaps.com
           "styles": [{"featureType":"all","elementType":"geometry","stylers":[{"color":"#787878"}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"gamma":0.01},{"lightness":20}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"saturation":-31},{"lightness":-33},{"weight":2},{"gamma":0.8}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":30},{"saturation":30}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#ff0000"},{"saturation":"-50"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"saturation":20}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"lightness":20},{"saturation":-20}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":10},{"saturation":-30}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"saturation":25},{"lightness":25}]},{"featureType":"water","elementType":"all","stylers":[{"lightness":-20}]}],
+          // location user is looking for to move to next time period
           "portal": { lat: 41.895, lng: 12.474 },
           "zoom": 18,
           "icon": { url: "https://cdn1.iconfinder.com/data/icons/arms-and-armor/100/01-512.png", scaledSize: new google.maps.Size(30, 30) }
@@ -259,6 +293,7 @@ $(() => {
         }
       ];
 
+      // variables storing info from maps array
       myLocation = locations[counter].center;
       let styles = locations[counter].styles;
       let name = locations[counter].name;
@@ -266,6 +301,9 @@ $(() => {
       portals = locations[counter].portal;
       icons = locations[counter].icon;
       zoom = locations[counter].zoom;
+
+      // displays what time period user is in
+      $(".locationtitle").html(`Your location: ${periods}, ${name}`);
 
       map = new google.maps.Map($mapDiv[0], {
         center: myLocation,
@@ -275,6 +313,7 @@ $(() => {
         disableDefaultUI: true
       });
 
+      // adds click event to the whole map
       google.maps.event.addListener(map, 'click', function(event) {
 
         let lat = (event.latLng.lat());
@@ -282,42 +321,38 @@ $(() => {
 
         var portal = new google.maps.LatLng(portals);
         var userClick = new google.maps.LatLng(lat, lng);
-          // console.log(userClick);
 
+        // checks distance between portal and user click
         function calcDistance(portal, userClick) {
-          // console.log('google maps:', google.maps);
-          // console.log('google maps geometry:', google.maps.geometry);
           return (google.maps.geometry.spherical.computeDistanceBetween(portal, userClick)).toFixed(0);
         }
 
+        // win condition: if user clicks within 200m of portal, runs the next map and shows warp popup
         if ((calcDistance(portal, userClick)) < 200) {
-            // console.log(calcDistance(portal, userClick));
           $(".locationtracker2").html("");
-          $popup2.show();
-          $popup2.css("color", "white");
-          $popupContent2.html("WOOOOOOOAAAAAAAAAH");
-          $popup2.css("background-image", "url('/images/warp.gif')");
+          $popupWarp.show();
+          $popupWarp.css("color", "white");
+          $popupContentWarp.html("WOOOOOOOAAAAAAAAAH");
+          $popupWarp.css("background-image", "url('/images/warp.gif')");
           setTimeout(() => {
-            $popup2.hide();
+            $popupWarp.hide();
           }, 1500);
           showMap();
 
+          // displays distance from portal
         } else if ((calcDistance(portal, userClick)) < 800) {
             $(".locationtracker2").html(`
               <p>Getting warmer, ${calcDistance(portal, userClick)} metres away`);
-            // console.log('portal', portal.lat(), portal.lng());
-            // console.log('click', userClick.lat(), userClick.lng());
         } else {
             $(".locationtracker2").html(`
               <p>Pretty cold, ${calcDistance(portal, userClick)} metres away`);
-            // console.log('portal', portal.lat(), portal.lng());
-            // console.log('click', userClick.lat(), userClick.lng());
         }
-
       });
 
+      // clears markers and events when new map is run
       markers = [];
       currentEvent = undefined;
+
       getHistEvents();
       counter++;
     }
@@ -447,6 +482,7 @@ $(() => {
     }).fail(showLoginForm);
   }
 
+  // if logged in, runs createHistEventMarker function
   function getHistEvents() {
     if(event) event.preventDefault();
 
@@ -469,6 +505,7 @@ $(() => {
     .fail(showLoginForm);
   }
 
+  // displays list of events in time period
   function showHistEvents() {
     let Events = allEvents;
     let $row = $('<div class="row"></div>');
@@ -523,17 +560,7 @@ $(() => {
     .fail(showLoginForm);
   }
 
-  function logout() {
-    if(event) event.preventDefault();
-    localStorage.removeItem('token');
-    $mapDiv.hide();
-    $('.loggedIn').hide();
-    $('.loggedOut').show();
-    counter = 0;
-    $('.blacktop').show();
-    showLoginForm();
-  }
-
+  // creates a marker with relevant icon for each event in time period
   function createHistEventMarker(histEvent) {
     let latLng = { lat:histEvent.lat, lng:histEvent.lng};
     markers.push(new google.maps.Marker({
@@ -543,6 +570,7 @@ $(() => {
     }));
   }
 
+  // runs when game is complete
   function reset() {
     counter = 0;
     allEvents = [];
