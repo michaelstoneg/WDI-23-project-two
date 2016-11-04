@@ -1,3 +1,4 @@
+//links in our wikipedia api
 const request = require('request-promise');
 
 function wikipediaShow(req, res) {
