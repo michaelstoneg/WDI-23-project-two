@@ -21,7 +21,7 @@ coming soo...
 
 ##### Made with:
 
-HTML5, CSS3, Bootstrap, Javascript, jQuery, AJAX, Google maps API, Express, MVC architecture, JWT, Gulp, Wikimedia API, NPM, Node.js, Mongo, Github.
+HTML5, CSS3, Bootstrap, Javascript, jQuery, AJAX, Google maps API, Express, MVC architecture, JWT, Gulp, Wikimedia API, NPM, Node.js, Mongo.
 
 
 
